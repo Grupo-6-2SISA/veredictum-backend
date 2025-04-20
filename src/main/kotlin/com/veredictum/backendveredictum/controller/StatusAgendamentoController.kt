@@ -82,5 +82,22 @@ class StatusAgendamentoController(
         }.orElse(ResponseEntity.notFound().build())
     }
 
+    @Operation(summary = "Excluir um status de agendamento por ID")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "204", description = "Status excluído com sucesso"),
+            ApiResponse(responseCode = "404", description = "Status não encontrado")
+        ]
+    )
+    @DeleteMapping("/{id}")
+    fun excluir(@PathVariable id: Int): ResponseEntity<Void> {
+        val statusOptional = repository.findById(id)
+        return if (statusOptional.isPresent) {
+            repository.delete(statusOptional.get())
+            ResponseEntity.noContent().build()
+        } else {
+            ResponseEntity.notFound().build()
+        }
+    }
 
 }

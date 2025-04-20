@@ -38,3 +38,10 @@ INSERT INTO status_agendamento (id_status_agendamento, descricao) VALUES
                                                                       (DEFAULT, 'Concluído'),
                                                                       (DEFAULT, 'Cancelado'),
                                                                       (DEFAULT, 'Atrasado');
+
+
+-- Tipos de lembrete
+INSERT INTO tipo_lembrete (id_tipo_lembrete, tipo) VALUES
+                                                       (DEFAULT, 'Atendimento'),
+                                                       (DEFAULT, 'Nota Fiscal'),
+                                                       (DEFAULT, 'Conta');
