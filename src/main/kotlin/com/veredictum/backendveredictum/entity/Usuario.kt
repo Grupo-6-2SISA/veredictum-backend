@@ -60,6 +60,7 @@ data class Usuario (
             email = this.email,
             isAtivo = this.isAtivo,
             isLogado = logado,
+            isAdm = this.isAdm,
         )
     }
 

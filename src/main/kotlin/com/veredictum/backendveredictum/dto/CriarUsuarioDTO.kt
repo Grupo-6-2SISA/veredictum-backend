@@ -1,12 +1,12 @@
 package com.veredictum.backendveredictum.dto
 
-data class LoginUsuarioDTO(
-
+data class CriarUsuarioDTO(
     val idUsuario: Int,
     val nome: String,
     val email: String,
+    val senha: String,
     val isAtivo: Boolean,
-    val isAdm: Boolean,
-    val isLogado: Boolean
+    val fkAdm: Int,
+    val isAdm: Boolean
 
 )

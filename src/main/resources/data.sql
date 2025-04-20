@@ -45,3 +45,23 @@ INSERT INTO tipo_lembrete (id_tipo_lembrete, tipo) VALUES
                                                        (DEFAULT, 'Atendimento'),
                                                        (DEFAULT, 'Nota Fiscal'),
                                                        (DEFAULT, 'Conta');
+
+-- Usuários administradores
+INSERT INTO usuario (id_usuario, nome, email, senha, is_ativo, is_adm, fk_adm) VALUES
+                                                                                   (DEFAULT, 'Lismara Ribeiro Matos', 'lismara.matos@email.com', 'senha123', TRUE, TRUE, NULL),
+                                                                                   (DEFAULT, 'Orlando Alves de Matos', 'orlando.matos@email.com', 'senha123', TRUE, TRUE, NULL);
+
+-- Usuários ativos não administradores
+INSERT INTO usuario (id_usuario, nome, email, senha, is_ativo, is_adm, fk_adm) VALUES
+                                                                                   (DEFAULT, 'Ana Clara Silva', 'ana.silva@email.com', 'senha123', TRUE, FALSE, 1),
+                                                                                   (DEFAULT, 'Carlos Eduardo Santos', 'carlos.santos@email.com', 'senha123', TRUE, FALSE, 2);
+
+-- Usuários inativos
+INSERT INTO usuario (id_usuario, nome, email, senha, is_ativo, is_adm, fk_adm) VALUES
+                                                                                   (DEFAULT, 'Fernanda Oliveira', 'fernanda.oliveira@email.com', 'senha123', FALSE, FALSE, 1),
+                                                                                   (DEFAULT, 'João Pedro Lima', 'joao.lima@email.com', 'senha123', FALSE, TRUE, NULL);
+
+-- Usuários com administrador associado
+INSERT INTO usuario (id_usuario, nome, email, senha, is_ativo, is_adm, fk_adm) VALUES
+                                                                                   (DEFAULT, 'Mariana Costa', 'mariana.costa@email.com', 'senha123', TRUE, FALSE, 1),
+                                                                                   (DEFAULT, 'Rafael Souza', 'rafael.souza@email.com', 'senha123', TRUE, FALSE, 2);
