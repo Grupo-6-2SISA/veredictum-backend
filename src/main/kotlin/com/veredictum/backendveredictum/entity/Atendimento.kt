@@ -1,15 +1,14 @@
 package com.veredictum.backendveredictum.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.veredictum.backendveredictum.enums.TipoAgendamento
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
 import org.hibernate.validator.constraints.URL
 import java.time.LocalDateTime
 
 @Entity
-@Table(name = "agendamento")
-data class Agendamento(
+@Table(name = "atendimento")
+data class Atendimento(
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
@@ -31,10 +30,6 @@ data class Agendamento(
     @field:NotNull(message = "O valor é obrigatório")
     @field:DecimalMin(value = "0.0", inclusive = false, message = "O valor deve ser maior que 0")
     var valor: Double,
-
-    @field:NotNull(message = "O tipo de agendamento é obrigatório")
-    @Column(nullable = false, columnDefinition = "varchar(50)")
-    var tipoAgendamento: TipoAgendamento,
 
     @field:NotBlank(message = "A descrição é obrigatória")
     @field:Size(max = 255, message = "A descrição não pode ter mais que 255 caracteres")
@@ -59,7 +54,6 @@ data class Agendamento(
         Usuario(),
         "",
         0.0,
-        TipoAgendamento.ATENDIMENTO, // Atribuindo um valor default
         "",
         LocalDateTime.now(),
         LocalDateTime.now(),

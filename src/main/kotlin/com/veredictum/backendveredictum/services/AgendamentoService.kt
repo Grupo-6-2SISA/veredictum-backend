@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class AgendamentoService (
-    val agendamentoRepository: AgendamentoRepository,
+    val agendamentoRepository: AtendimentoRepository,
     val clienteRepository: ClienteRepository,
     val usuarioRepository: UsuarioRepository,
     val historicoAgendamentoRepository: HistoricoAgendamentoRepository,

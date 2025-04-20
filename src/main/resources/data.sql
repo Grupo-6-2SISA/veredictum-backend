@@ -31,3 +31,10 @@ INSERT INTO cliente (
 
       (DEFAULT, 4, 'Alpha Corp', 'contato@alphacorp.com', NULL, NULL, '55667788000122', '1999-06-06', '2022-01-15',
        'Av. Business, 700', '99887766', 'Empresa inativa', '444555666', TRUE, FALSE, TRUE);
+
+-- Status de agendamentos (conta, nota e atendimento)
+INSERT INTO status_agendamento (id_status_agendamento, descricao) VALUES
+                                                                      (DEFAULT, 'Agendado'),
+                                                                      (DEFAULT, 'Concluído'),
+                                                                      (DEFAULT, 'Cancelado'),
+                                                                      (DEFAULT, 'Atrasado');
