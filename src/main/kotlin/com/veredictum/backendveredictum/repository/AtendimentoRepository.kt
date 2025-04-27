@@ -5,4 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface AtendimentoRepository: JpaRepository<Atendimento, Int> {
 
+    fun findByClienteIdCliente(idCliente: Int): List<Atendimento>
+
+    fun findByUsuarioIdUsuario(idUsuario: Int): List<Atendimento>
+
 }

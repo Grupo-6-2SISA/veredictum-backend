@@ -30,9 +30,11 @@ data class Conta(
 
     var dataVencimento: LocalDate,
 
+    var urlNuvem: String? = null,
+
     var descricao: String? = null,
 
-    var isEmitida: Boolean = false
+    var isPago: Boolean = false
 
 ) {
     constructor() : this(
@@ -42,6 +44,7 @@ data class Conta(
         "",
         0.0,
         LocalDate.now(),
+        "",
         "",
         false
     )

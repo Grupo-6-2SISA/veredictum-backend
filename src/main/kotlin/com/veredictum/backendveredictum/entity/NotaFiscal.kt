@@ -31,7 +31,9 @@ data class NotaFiscal(
 
     var descricao: String? = null,
 
-    var isPago: Boolean = false
+    var urlNuvem: String? = null,
+
+    var isEmitida: Boolean = false
 
 
 
@@ -43,6 +45,7 @@ data class NotaFiscal(
         "",
         0.0,
         LocalDate.now(),
+        "",
         "",
         false
     )

@@ -44,7 +44,8 @@ INSERT INTO status_agendamento (id_status_agendamento, descricao) VALUES
 INSERT INTO tipo_lembrete (id_tipo_lembrete, tipo) VALUES
                                                        (DEFAULT, 'Atendimento'),
                                                        (DEFAULT, 'Nota Fiscal'),
-                                                       (DEFAULT, 'Conta');
+                                                       (DEFAULT, 'Conta'),
+                                                       (DEFAULT, 'Aniversario');
 
 -- Usuários administradores
 INSERT INTO usuario (id_usuario, nome, email, senha, is_ativo, is_adm, fk_adm) VALUES
@@ -65,3 +66,42 @@ INSERT INTO usuario (id_usuario, nome, email, senha, is_ativo, is_adm, fk_adm) V
 INSERT INTO usuario (id_usuario, nome, email, senha, is_ativo, is_adm, fk_adm) VALUES
                                                                                    (DEFAULT, 'Mariana Costa', 'mariana.costa@email.com', 'senha123', TRUE, FALSE, 1),
                                                                                    (DEFAULT, 'Rafael Souza', 'rafael.souza@email.com', 'senha123', TRUE, FALSE, 2);
+
+-- Atendimentos (variação de clientes, usuários, status e valores)
+-- Para clientes ativos, inativos e com indicador
+
+-- Atendimento 1: Cliente João da Silva (Cliente Regular)
+INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
+VALUES (DEFAULT, 1, 1, 'Atendimento Jurídico', 150.00, 'Atendimento relacionado a questões jurídicas.', '2023-04-01 09:00:00', '2023-04-01 12:00:00', '2023-04-01 12:30:00', FALSE);
+
+-- Atendimento 2: Empresa X Ltda (Cliente PJ)
+INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
+VALUES (DEFAULT, 2, 2, 'Consultoria PJ', 500.00, 'Consultoria para expansão de mercado.', '2023-04-10 10:00:00', '2023-04-10 15:00:00', '2023-04-10 18:00:00', TRUE);
+
+-- Atendimento 3: Lucas Pereira (Cliente Pro Bono)
+INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
+VALUES (DEFAULT, 3, 1, 'Aconselhamento Pro Bono', 0.00, 'Aconselhamento jurídico gratuito.', '2023-05-02 11:00:00', '2023-05-02 13:00:00', '2023-05-02 13:30:00', FALSE);
+
+-- Atendimento 4: Tech Solutions ME (Empresa de Tecnologia)
+INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
+VALUES (DEFAULT, 4, 2, 'Suporte Técnico', 350.00, 'Suporte para problemas em sistemas de TI.', '2023-06-15 14:00:00', '2023-06-15 16:00:00', '2023-06-15 16:30:00', TRUE);
+
+-- Atendimento 5: Maria Oliveira (Indicada por João)
+INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
+VALUES (DEFAULT, 5, 1, 'Consultoria Jurídica Maria', 250.00, 'Consultoria jurídica para resolver pendências.', '2024-03-12 09:00:00', '2024-03-12 11:00:00', '2024-03-12 11:30:00', FALSE);
+
+-- Atendimento 6: Serviços Gerais LTDA (Indicada pela Empresa X)
+INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
+VALUES (DEFAULT, 6, 2, 'Consultoria Empresarial', 600.00, 'Consultoria para melhoria de processos empresariais.', '2024-05-22 13:00:00', '2024-05-22 17:00:00', '2024-05-22 17:30:00', TRUE);
+
+-- Atendimento 7: Fernanda Lima (Indicada por Lucas)
+INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
+VALUES (DEFAULT, 7, 1, 'Consultoria Jurídica Fernanda', 400.00, 'Consultoria jurídica para questões trabalhistas.', '2023-11-15 09:00:00', '2023-11-15 12:00:00', '2023-11-15 12:30:00', FALSE);
+
+-- Atendimento 8: Carlos Souza (Cliente Inativo)
+INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
+VALUES (DEFAULT, 8, 1, 'Atendimento Inativo', 200.00, 'Atendimento finalizado e cliente inativo.', '2020-11-10 10:00:00', '2020-11-10 12:00:00', '2020-11-10 12:30:00', TRUE);
+
+-- Atendimento 9: Alpha Corp (Empresa Inativa)
+INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
+VALUES (DEFAULT, 9, 2, 'Consultoria Inativa', 550.00, 'Consultoria empresarial finalizada e cliente inativo.', '2021-05-05 08:00:00', '2021-05-05 10:00:00', '2021-05-05 10:30:00', FALSE);

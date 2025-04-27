@@ -1,9 +1,9 @@
 package com.veredictum.backendveredictum.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.veredictum.backendveredictum.dto.AtendimentoDTO
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
-import org.hibernate.validator.constraints.URL
 import java.time.LocalDateTime
 
 @Entity
@@ -13,7 +13,7 @@ data class Atendimento(
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var idAgendamento: Int? = null,
+    var idAtendimento: Int? = null,
 
     @ManyToOne
     @JoinColumn(name = "fk_cliente")
@@ -41,9 +41,6 @@ data class Atendimento(
 
     var dataVencimento: LocalDateTime,
 
-    @field:URL(message = "A URL da nuvem deve ser válida (exemplo: https://exemplo.com).")
-    var urlNuvem: String,
-
     @field:NotNull(message = "O status de pagamento é obrigatório")
     var isPago: Boolean = false,
 
@@ -58,7 +55,21 @@ data class Atendimento(
         LocalDateTime.now(),
         LocalDateTime.now(),
         LocalDateTime.now(),
-        "",
         false
     )
+
+    fun toDTO(): AtendimentoDTO {
+        return AtendimentoDTO(
+            idAgendamento = this.idAtendimento ?: 0,
+            fkCliente = this.cliente.idCliente ?: 0,  // ID do Cliente
+            fkUsuario = this.usuario.idUsuario ?: 0,  // ID do Usuário
+            etiqueta = this.etiqueta ?: "",
+            valor = this.valor,
+            descricao = this.descricao ?: "",
+            dataInicio = this.dataInicio,
+            dataFim = this.dataFim,
+            dataVencimento = this.dataVencimento,
+            isPago = this.isPago
+        )
+    }
 }
