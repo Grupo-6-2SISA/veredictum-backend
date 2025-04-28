@@ -103,13 +103,13 @@ class AtendimentoController(
     }
 
     @Operation(
-        summary = "Listar atendimentos por status",
+        summary = "Listar atendimentos por id de status",
         description = "Recupera todos os atendimentos com um status específico."
     )
     @ApiResponses(
         value = [
-            ApiResponse(responseCode = "200", description = "Atendimentos encontrados para o status"),
-            ApiResponse(responseCode = "204", description = "Nenhum atendimento encontrado para este status")
+            ApiResponse(responseCode = "200", description = "Atendimentos encontrados para o id de status"),
+            ApiResponse(responseCode = "204", description = "Nenhum atendimento encontrado para este id de status")
         ]
     )
     @GetMapping("listar-por-status/{status}")
