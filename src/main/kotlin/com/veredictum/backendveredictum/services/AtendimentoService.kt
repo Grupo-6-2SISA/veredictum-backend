@@ -11,8 +11,6 @@ import java.time.LocalDateTime
 class AtendimentoService(
     private val atendimentoRepository: AtendimentoRepository,
     private val statusAgendamentoRepository: StatusAgendamentoRepository,
-    private val clienteRepository: ClienteRepository,
-    private val usuarioRepository: UsuarioRepository,
     private val historicoStatusAgendamentoRepository: HistoricoStatusAgendamentoRepository,
 ) {
 

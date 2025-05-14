@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import io.swagger.v3.oas.models.media.Schema
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -49,6 +50,7 @@ class UsuarioController (
         value = [
             ApiResponse(responseCode = "200", description = "Usuário encontrado e logado com sucesso"),
             ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            ApiResponse(responseCode = "401", description = "Usuário inativo"),
             ApiResponse(responseCode = "400", description = "Email ou Senha incorretos")
         ]
     )
@@ -63,7 +65,7 @@ class UsuarioController (
         return if (isLogado.isAtivo) {
             ResponseEntity.ok(isLogado.toLoginDTO(true)) // 200 OK com dados do usuário
         } else {
-            ResponseEntity.notFound().build() // 404 Not Found
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build() // 401 Unauthorized
         }
     }
 
