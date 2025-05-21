@@ -1,8 +1,10 @@
 -- Clientes base (sem indicador)
+
 INSERT INTO cliente (
     id_cliente, fk_indicador, nome, email, rg, cpf, cnpj, data_nascimento, data_inicio,
     endereco, cep, descricao, inscricao_estadual, is_pro_bono, is_ativo, is_juridico
-) VALUES
+)
+VALUES
       (DEFAULT, NULL, 'João da Silva', 'joao.silva@email.com', '1234567890', '12345678909', NULL, '1990-05-10', '2023-01-01',
        'Rua das Laranjeiras, 100', '12345678', 'Cliente regular', '123456789', FALSE, TRUE, FALSE),
 
@@ -16,6 +18,7 @@ INSERT INTO cliente (
        'Rua das Flores, 900', '33445566', 'Empresa de tecnologia', '223344556', FALSE, TRUE, TRUE),
 
 -- Clientes com indicador
+
       (DEFAULT, 1, 'Maria Oliveira', 'maria.oliveira@email.com', '0987654321', '98765432100', NULL, '1985-09-25', '2024-03-10',
        'Rua do Sol, 200', '11223344', 'Indicada pelo João', '111222333', FALSE, TRUE, FALSE),
 

@@ -18,5 +18,5 @@ data class ClienteDTO (
     val inscricaoEstadual: String?,
     val isProBono: Boolean?,
     val isAtivo: Boolean,
-    val isJuridico: Boolean?
+    val isJuridico: Boolean?,
     )

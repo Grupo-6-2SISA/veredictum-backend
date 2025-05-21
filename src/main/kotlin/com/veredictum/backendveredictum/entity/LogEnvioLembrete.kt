@@ -1,6 +1,7 @@
 package com.veredictum.backendveredictum.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
@@ -15,9 +16,9 @@ import java.time.LocalDateTime
 @Table(name = "log_envio_lembrete")
 data class LogEnvioLembrete(
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @Column(name = "id_log_envio_lembrete")
     var idLogEnvioLembrete: Int? = null,
 
     @ManyToOne
@@ -37,12 +38,14 @@ data class LogEnvioLembrete(
     var atendimento: Atendimento,
 
     @CreationTimestamp
+    @Column(name = "data_hora_criacao")
     var dataHoraCriacao: LocalDateTime = LocalDateTime.now(),
 
+    @Column(name = "mensagem")
     @field:NotBlank(message = "A mensagem do lembrete é obrigatória")
     var mensagem: String = "",
 
-) {
+    ) {
     constructor() : this(
         null,
         TipoLembrete(),

@@ -2,8 +2,6 @@ package com.veredictum.backendveredictum.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
-import jakarta.validation.constraints.FutureOrPresent
-import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDate
 
 @Entity
@@ -12,14 +10,13 @@ data class NotaFiscal(
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idNotaFiscal: Int? = null,
 
-    @JoinColumn(name = "fk_cliente")
     @ManyToOne
+    @JoinColumn(name = "fk_cliente")
     var cliente: Cliente? = null,
 
-    @CreationTimestamp
     @Column(name = "data_criacao", updatable = false)
     var dataCriacao: LocalDate = LocalDate.now(),
 
@@ -27,26 +24,27 @@ data class NotaFiscal(
 
     var valor: Double? = null,
 
-    var dataVencimento: LocalDate,
+    @Column(name = "data_vencimento")
+    var dataVencimento: LocalDate?,
 
     var descricao: String? = null,
 
+    @Column(name = "url_nuvem")
     var urlNuvem: String? = null,
 
+    @Column(name = "is_emitida")
     var isEmitida: Boolean = false
-
-
-
-    ) {
+)
+{
     constructor() : this(
         null,
+        Cliente(),
+        LocalDate.now(),
         null,
-        LocalDate.now(),
-        "",
-        0.0,
-        LocalDate.now(),
-        "",
-        "",
+        null,
+        null,
+        null,
+        null,
         false
     )
 }

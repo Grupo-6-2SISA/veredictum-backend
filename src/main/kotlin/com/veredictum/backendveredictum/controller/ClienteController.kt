@@ -70,8 +70,8 @@ class ClienteController(
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
-    @PostMapping
-    fun cadastrar(@RequestBody @Valid novoClienteDTO: ClienteDTO): ResponseEntity<ClienteDTO> {
+    @PostMapping("/cadastrar-inativo")
+    fun cadastrarInativo(@RequestBody @Valid novoClienteDTO: ClienteDTO): ResponseEntity<ClienteDTO> {
         val indicador = novoClienteDTO.fkIndicador?.let { id ->
             repository.findById(id).orElseThrow {
                 ResponseStatusException(HttpStatus.BAD_REQUEST, "Indicador com ID $id não encontrado")
@@ -92,8 +92,8 @@ class ClienteController(
             descricao = novoClienteDTO.descricao,
             inscricaoEstadual = novoClienteDTO.inscricaoEstadual,
             isProBono = novoClienteDTO.isProBono,
-            isAtivo = novoClienteDTO.isAtivo,
-            isJuridico = novoClienteDTO.isJuridico
+            isAtivo = false, // Valor padrão
+            isJuridico = novoClienteDTO.isJuridico,
         )
 
         val clienteSalvo = repository.save(novoCliente)

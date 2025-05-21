@@ -19,7 +19,9 @@ data class TipoLembrete(
     @field:NotBlank(message = "O tipo do lembrete é obrigatório")
     var tipo: String = "",
 
-) {
+)
+
+{
     constructor() : this(
         null,
         ""

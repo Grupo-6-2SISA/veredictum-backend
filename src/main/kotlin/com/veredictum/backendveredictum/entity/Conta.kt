@@ -2,9 +2,6 @@ package com.veredictum.backendveredictum.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
-import jakarta.validation.constraints.FutureOrPresent
-import org.hibernate.annotations.CreationTimestamp
-import org.springframework.web.client.RestClientException
 import java.time.LocalDate
 
 @Entity
@@ -13,14 +10,13 @@ data class Conta(
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idConta: Int? = null,
 
     @ManyToOne
     @JoinColumn(name = "fk_usuario")
     var usuario: Usuario? = null,
 
-    @CreationTimestamp
     @Column(name = "data_criacao", updatable = false)
     var dataCriacao: LocalDate = LocalDate.now(),
 
@@ -28,24 +24,29 @@ data class Conta(
 
     var valor: Double? = null,
 
-    var dataVencimento: LocalDate,
+    @Column(name = "data_vencimento")
+    var dataVencimento: LocalDate?,
 
+    @Column(name = "url_nuvem")
     var urlNuvem: String? = null,
 
     var descricao: String? = null,
 
+    @Column(name = "is_pago")
     var isPago: Boolean = false
 
-) {
+)
+
+{
     constructor() : this(
         null,
+        Usuario(),
+        LocalDate.now(),
         null,
-        LocalDate.now(),
-        "",
-        0.0,
-        LocalDate.now(),
-        "",
-        "",
+        null,
+        null,
+        null,
+        null,
         false
     )
 }
