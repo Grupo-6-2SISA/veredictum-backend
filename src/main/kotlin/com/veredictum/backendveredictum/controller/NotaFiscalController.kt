@@ -27,20 +27,6 @@ class NotaFiscalController(
 
 ) {
 
-    private fun NotaFiscal.toDTO(): NotaFiscalDTO {
-        return NotaFiscalDTO(
-            idNotaFiscal = this.idNotaFiscal,
-            fkCliente = this.cliente?.idCliente,
-            dataCriacao = this.dataCriacao,
-            etiqueta = this.etiqueta,
-            valor = this.valor,
-            dataVencimento = this.dataVencimento,
-            descricao = this.descricao,
-            urlNuvem = this.urlNuvem,
-            isEmitida = this.isEmitida
-        )
-    }
-
     @Operation(
         summary = "Listar todas as notas fiscais",
         description = "Retorna uma lista de todas as notas fiscais cadastradas no sistema."
