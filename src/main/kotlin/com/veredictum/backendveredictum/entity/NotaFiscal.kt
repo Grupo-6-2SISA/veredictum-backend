@@ -1,6 +1,7 @@
 package com.veredictum.backendveredictum.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.veredictum.backendveredictum.dto.NotaFiscalDTO
 import jakarta.persistence.*
 import java.time.LocalDate
 
@@ -47,4 +48,19 @@ data class NotaFiscal(
         null,
         false
     )
+
+
+    fun toDTO(): NotaFiscalDTO {
+        return NotaFiscalDTO(
+            idNotaFiscal = this.idNotaFiscal,
+            fkCliente = this.cliente?.idCliente,
+            dataCriacao = this.dataCriacao,
+            etiqueta = this.etiqueta,
+            valor = this.valor,
+            dataVencimento = this.dataVencimento,
+            descricao = this.descricao,
+            urlNuvem = this.urlNuvem,
+            isEmitida = this.isEmitida
+        )
+    }
 }

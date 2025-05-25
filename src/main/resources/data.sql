@@ -98,6 +98,7 @@ INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor
 VALUES (DEFAULT, 6, 2, 'Consultoria Empresarial', 600.00, 'Consultoria para melhoria de processos empresariais.', '2024-05-22 13:00:00', '2024-05-22 17:00:00', '2024-05-22 17:30:00', TRUE);
 
 -- Atendimento 7: Fernanda Lima (Indicada por Lucas)
+
 INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
 VALUES (DEFAULT, 7, 1, 'Consultoria Jurídica Fernanda', 400.00, 'Consultoria jurídica para questões trabalhistas.', '2023-11-15 09:00:00', '2023-11-15 12:00:00', '2023-11-15 12:30:00', FALSE);
 
@@ -108,3 +109,36 @@ VALUES (DEFAULT, 8, 1, 'Atendimento Inativo', 200.00, 'Atendimento finalizado e 
 -- Atendimento 9: Alpha Corp (Empresa Inativa)
 INSERT INTO atendimento (id_atendimento, fk_cliente, fk_usuario, etiqueta, valor, descricao, data_inicio, data_fim, data_vencimento, is_pago)
 VALUES (DEFAULT, 9, 2, 'Consultoria Inativa', 550.00, 'Consultoria empresarial finalizada e cliente inativo.', '2021-05-05 08:00:00', '2021-05-05 10:00:00', '2021-05-05 10:30:00', FALSE);
+
+
+
+
+-- Contas (associadas a clientes e atendimentos)
+INSERT INTO conta (id_conta, fk_usuario, data_criacao, etiqueta, valor, data_vencimento, descricao, is_pago, url_nuvem)
+VALUES
+(DEFAULT, 1, '2023-10-01', 'Conta Jurídica João', 200.00, '2023-10-15', 'Pagamento referente ao atendimento jurídico.', FALSE, NULL),
+(DEFAULT, 2, '2023-10-05', 'Conta Consultoria Empresa Y', 600.00, '2023-10-20', 'Pagamento referente à consultoria empresarial.', TRUE, 'comprovante_empresa_y.pdf'),
+(DEFAULT, 3, '2023-10-10', 'Conta Pro Bono Lucas', 0.00, '2023-10-25', 'Conta referente ao atendimento pro bono.', FALSE, NULL),
+(DEFAULT, 4, '2023-10-15', 'Conta Suporte Tech Solutions', 400.00, '2023-10-30', 'Pagamento referente ao suporte técnico.', TRUE, 'comprovante_tech_solutions.pdf');
+-- Mais Contas (associadas a diferentes usuários)
+INSERT INTO conta (id_conta, fk_usuario, data_criacao, etiqueta, valor, data_vencimento, descricao, is_pago, url_nuvem)
+VALUES
+(DEFAULT, 2, '2023-11-01', 'Conta Maria Oliveira - Consulta', 250.00, '2023-11-15', 'Pagamento por consulta jurídica.', FALSE, NULL),
+(DEFAULT, 1, '2023-11-10', 'Conta Serviços Gerais LTDA - Projeto', 750.00, '2023-11-25', 'Pagamento por projeto de consultoria.', TRUE, 'comprovante_servicos_gerais.pdf'),
+(DEFAULT, 3, '2023-12-01', 'Conta Fernanda Lima - Assessoria', 300.00, '2023-12-15', 'Pagamento por assessoria trabalhista.', FALSE, NULL),
+(DEFAULT, 2, '2024-01-10', 'Conta Alpha Corp - Revisão Contratual', 550.00, '2024-01-25', 'Pagamento por revisão de contratos.', TRUE, 'comprovante_alpha_corp.pdf');
+
+
+-- Notas Fiscais (associadas a clientes)
+INSERT INTO nota_fiscal (id_nota_fiscal, fk_cliente, data_criacao, etiqueta, valor, data_vencimento, descricao, url_nuvem, is_emitida) VALUES
+(DEFAULT, 1, '2023-04-02', 'NF Atendimento João', 165.00, '2023-04-16', 'Nota fiscal do atendimento jurídico', 'nuvem.com/nf_joao.pdf', TRUE),
+(DEFAULT, 2, '2023-04-11', 'NF Consultoria Empresa X', 550.00, '2023-04-26', 'Nota fiscal da consultoria de mercado', 'nuvem.com/nf_empresa_x.pdf', TRUE),
+(DEFAULT, 4, '2023-06-16', 'NF Suporte Tech Solutions', 385.00, '2023-06-30', 'Nota fiscal do suporte técnico', 'nuvem.com/nf_tech.pdf', FALSE),
+(DEFAULT, 6, '2024-05-23', 'NF Consultoria Serviços Gerais', 660.00, '2024-06-06', 'Nota fiscal da consultoria empresarial', 'nuvem.com/nf_servicos_gerais.pdf', TRUE);
+
+-- Mais Notas Fiscais (associadas a diferentes clientes)
+INSERT INTO nota_fiscal (id_nota_fiscal, fk_cliente, data_criacao, etiqueta, valor, data_vencimento, descricao, url_nuvem, is_emitida) VALUES
+(DEFAULT, 5, '2023-07-01', 'NF Consulta Maria Oliveira', 275.00, '2023-07-15', 'Nota fiscal da consulta jurídica.', 'nuvem.com/nf_maria.pdf', TRUE),
+(DEFAULT, 6, '2023-08-01', 'NF Projeto Serviços Gerais', 825.00, '2023-08-15', 'Nota fiscal do projeto de consultoria.', 'nuvem.com/nf_servicos.pdf', TRUE),
+(DEFAULT, 7, '2023-09-01', 'NF Assessoria Fernanda Lima', 330.00, '2023-09-15', 'Nota fiscal da assessoria trabalhista.', NULL, FALSE),
+(DEFAULT, 9, '2024-02-01', 'NF Revisão Alpha Corp', 605.00, '2024-02-15', 'Nota fiscal da revisão contratual.', 'nuvem.com/nf_alpha.pdf', TRUE);

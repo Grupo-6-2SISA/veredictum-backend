@@ -67,7 +67,6 @@ class AtendimentoService(
 
         val novoAtendimento = atendimentoRepository.save(atendimento)
 
-        // Registrar o status inicial (precisa ser passado ou fixado)
         val statusInicial = statusAgendamentoRepository.findById(statusInicialId).orElse(null)
 
         registrarHistorico(novoAtendimento, statusInicial)
@@ -79,7 +78,6 @@ class AtendimentoService(
         val atendimento = atendimentoRepository.findById(idAtendimento).orElse(null) ?: return false
         val novoStatus = statusAgendamentoRepository.findById(novoStatusId).orElse(null) ?: return false
 
-        // Apenas cria um novo histórico com o novo status
         registrarHistorico(atendimento, novoStatus)
 
         return true
