@@ -16,6 +16,7 @@ class ContaService(
     private val usuarioService: UsuarioService
 ) {
 
+
     fun save(conta: Conta): Conta {
         val usuarioId = conta.usuario?.idUsuario
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário deve ser informado para criar/atualizar uma conta")
@@ -55,33 +56,42 @@ class ContaService(
         return contaRepository.save(contaToSave)
     }
 
+
     fun findById(id: Int): Optional<Conta> {
         return contaRepository.findById(id)
     }
+
 
     fun findAll(): List<Conta> {
         return contaRepository.findAll()
     }
 
+
     fun findAll(sort: Sort): List<Conta> {
         return contaRepository.findAll(sort)
     }
 
+
     fun findByUsuarioId(usuarioId: Int): List<Conta> {
-        return contaRepository.findByUsuarioId(usuarioId)
+        // Corrigido: Chamando o método findByUsuario_IdUsuario do repositório
+        return contaRepository.findByUsuario_IdUsuario(usuarioId)
     }
+
 
     fun findByIsPago(isPago: Boolean): List<Conta> {
         return contaRepository.findByIsPago(isPago)
     }
 
+
     fun existsById(id: Int): Boolean {
         return contaRepository.existsById(id)
     }
 
+
     fun deleteById(id: Int) {
         contaRepository.deleteById(id)
     }
+
 
     fun partialUpdate(id: Int, updates: Map<String, Any>): Conta {
         val conta = contaRepository.findById(id)
@@ -101,7 +111,8 @@ class ContaService(
                 "urlNuvem" -> conta.urlNuvem = value as? String
                 "descricao" -> conta.descricao = value as? String
                 "isPago" -> conta.isPago = value as? Boolean ?: conta.isPago
-                else -> {}
+                // dataCriacao não deve ser atualizado
+                else -> {} // Ignora outras propriedades
             }
         }
         return contaRepository.save(conta)

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort
 
 @Repository
 interface ContaRepository : JpaRepository<Conta, Int> {
-    fun findByUsuarioId(usuarioId: Int): List<Conta>
+    fun findByUsuario_IdUsuario(idUsuario: Int): List<Conta>
     fun findByIsPago(isPago: Boolean): List<Conta>
     override fun findAll(sort: Sort): List<Conta>
 }
