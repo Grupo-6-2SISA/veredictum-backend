@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "atendimento")
-data class Atendimento(
+data class  Atendimento(
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Id
