@@ -1,3 +1,7 @@
+CREATE DATABASE IF NOT EXISTS veredictum;
+
+USE veredictum;
+
 -- Hibernate:
 drop table if exists atendimento
     -- Hibernate:
