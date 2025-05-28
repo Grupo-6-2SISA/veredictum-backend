@@ -55,11 +55,11 @@ data class NotaFiscal(
             idNotaFiscal = this.idNotaFiscal,
             fkCliente = this.cliente?.idCliente,
             dataCriacao = this.dataCriacao,
-            etiqueta = this.etiqueta,
-            valor = this.valor,
-            dataVencimento = this.dataVencimento,
-            descricao = this.descricao,
-            urlNuvem = this.urlNuvem,
+            etiqueta = this.etiqueta ?: "",
+            valor = this.valor ?: 0.0,
+            dataVencimento = this.dataVencimento ?: LocalDate.now(),
+            descricao = this.descricao ?: "",
+            urlNuvem = this.urlNuvem ?: "",
             isEmitida = this.isEmitida
         )
     }

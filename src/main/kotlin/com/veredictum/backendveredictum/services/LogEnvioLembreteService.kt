@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class LogEnvioLembreteService(
+
     private val logEnvioLembreteRepository: LogEnvioLembreteRepository
+
 ) {
 
     fun criarLog(logEnvioLembrete: LogEnvioLembrete): LogEnvioLembrete {

@@ -18,11 +18,14 @@ class ContaService(
 
 
     fun save(conta: Conta): Conta {
+
         val usuarioId = conta.usuario?.idUsuario
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário deve ser informado para criar/atualizar uma conta")
 
+
         val usuario = usuarioService.findById(usuarioId).orElseThrow {
             ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário com ID $usuarioId não encontrado")
+
         }
 
         val contaToSave: Conta

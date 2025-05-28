@@ -51,6 +51,8 @@ class ContaController(
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
+
+
     @GetMapping("/{id}")
     fun buscarContaPorId(@PathVariable id: Int): ResponseEntity<Conta> {
         return contaService.findById(id)

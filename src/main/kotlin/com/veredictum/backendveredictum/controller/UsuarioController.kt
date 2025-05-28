@@ -54,6 +54,7 @@ class UsuarioController (
             ApiResponse(responseCode = "400", description = "Email ou Senha incorretos")
         ]
     )
+
     @PostMapping("/logar")
     fun logar(@RequestBody usuarioALogar: LogarUsuarioDTO): ResponseEntity<LoginUsuarioDTO> {
         val isLogado = repository.findByEmailAndSenha(usuarioALogar.email, usuarioALogar.senha)
