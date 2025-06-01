@@ -142,3 +142,11 @@ INSERT INTO nota_fiscal (id_nota_fiscal, fk_cliente, data_criacao, etiqueta, val
 (DEFAULT, 6, '2023-08-01', 'NF Projeto Serviços Gerais', 825.00, '2023-08-15', 'Nota fiscal do projeto de consultoria.', 'nuvem.com/nf_servicos.pdf', TRUE),
 (DEFAULT, 7, '2023-09-01', 'NF Assessoria Fernanda Lima', 330.00, '2023-09-15', 'Nota fiscal da assessoria trabalhista.', NULL, FALSE),
 (DEFAULT, 9, '2024-02-01', 'NF Revisão Alpha Corp', 605.00, '2024-02-15', 'Nota fiscal da revisão contratual.', 'nuvem.com/nf_alpha.pdf', TRUE);
+
+-- Inserts para rotina
+INSERT INTO rotina (id_rotina, nome_rotina, hora_inicio, data_inicio, data_fim, rotina_chamada, is_ativo) VALUES
+                                                                                                              (DEFAULT, 'Envio de Feliz Aniversário', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_cliente', TRUE),
+                                                                                                              (DEFAULT, 'Envio de Lembrete de Aniversário o Funcionario', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_funcionario', TRUE),
+                                                                                                              (DEFAULT, 'Envio de Lembrete de Atendimento para o Cliente', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'atendimento_cliente', TRUE),
+                                                                                                              (DEFAULT, 'Envio de Lembrte de Atendimento para o Funcionario', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'atendimento_funcionario', TRUE),
+                                                                                                              (DEFAULT, 'Envio de Lembrete de Contas e Notas para o Funcionario', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'verifica_agendamento', TRUE);
