@@ -1,7 +1,7 @@
 package com.veredictum.backendveredictum.controller
 
+import com.veredictum.backendveredictum.dto.ContaDTO
 import com.veredictum.backendveredictum.entity.Conta
-import com.veredictum.backendveredictum.entity.Usuario
 import com.veredictum.backendveredictum.services.ContaService
 import com.veredictum.backendveredictum.services.UsuarioService
 import io.swagger.v3.oas.annotations.Operation
@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
-import java.time.LocalDate
+import java.util.NoSuchElementException
 
 @Tag(name = "Contas", description = "Endpoints para gerenciamento de contas")
 @RestController
@@ -35,9 +35,29 @@ class ContaController(
         ]
     )
     @PostMapping
-    fun criarConta(@RequestBody conta: Conta): ResponseEntity<Conta> {
-        val contaSalva = contaService.save(conta)
-        return ResponseEntity.status(HttpStatus.CREATED).body(contaSalva)
+    fun criarConta(@RequestBody contaDTO: ContaDTO): ResponseEntity<Conta> {
+        try {
+            val usuario = usuarioService.findById(contaDTO.fkUsuario
+                ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário deve ser informado")).orElseThrow {
+                ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário não encontrado")
+            }
+            val conta = Conta(
+                usuario = usuario,
+                dataCriacao = contaDTO.dataCriacao,
+                etiqueta = contaDTO.etiqueta,
+                valor = contaDTO.valor,
+                dataVencimento = contaDTO.dataVencimento,
+                urlNuvem = contaDTO.urlNuvem,
+                descricao = contaDTO.descricao,
+                isPago = contaDTO.isPago
+            )
+            val contaSalva = contaService.save(conta)
+            return ResponseEntity.status(HttpStatus.CREATED).body(contaSalva)
+        } catch (e: ResponseStatusException) {
+            throw e
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao criar conta.", e)
+        }
     }
 
     @Operation(
@@ -51,8 +71,6 @@ class ContaController(
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
-
-
     @GetMapping("/{id}")
     fun buscarContaPorId(@PathVariable id: Int): ResponseEntity<Conta> {
         return contaService.findById(id)
@@ -67,15 +85,19 @@ class ContaController(
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Lista de contas retornada com sucesso"),
+            ApiResponse(responseCode = "204", description = "Nenhuma conta encontrada"),
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
     @GetMapping
     fun listarTodasContas(): ResponseEntity<List<Conta>> {
-        val contas = contaService.findAll(Sort.by(Sort.Direction.ASC, "isPago"))
-        // Para mostrar 'isPago = false' primeiro, podemos inverter a ordem após buscar, se necessário.
-        val sortedContas = contas.sortedBy { !it.isPago }
-        return ResponseEntity.ok(sortedContas)
+        val sort = Sort.by(Sort.Direction.ASC, "isPago", "dataVencimento")
+        val contas = contaService.findAll(sort)
+        return if (contas.isNotEmpty()) {
+            ResponseEntity.ok(contas)
+        } else {
+            ResponseEntity.noContent().build()
+        }
     }
 
     @Operation(
@@ -89,9 +111,9 @@ class ContaController(
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
-    @GetMapping("/por-usuario/{fkUsuarioId}")
-    fun listarContasPorUsuario(@PathVariable fkUsuarioId: Int): ResponseEntity<List<Conta>> {
-        val contas = contaService.findByUsuarioId(fkUsuarioId)
+    @GetMapping("/por-usuario/{usuarioId}")
+    fun listarContasPorUsuario(@PathVariable usuarioId: Int): ResponseEntity<List<Conta>> {
+        val contas = contaService.findByUsuarioId(usuarioId)
         return if (contas.isNotEmpty()) {
             ResponseEntity.ok(contas)
         } else {
@@ -128,7 +150,7 @@ class ContaController(
         value = [
             ApiResponse(responseCode = "200", description = "Conta atualizada parcialmente com sucesso"),
             ApiResponse(responseCode = "404", description = "Conta não encontrada"),
-            ApiResponse(responseCode = "400", description = "Dados inválidos")
+            ApiResponse(responseCode = "400", description = "Dados inválidos para atualização")
         ]
     )
     @PatchMapping("/{id}")
@@ -139,7 +161,9 @@ class ContaController(
         } catch (e: NoSuchElementException) {
             ResponseEntity.notFound().build()
         } catch (e: IllegalArgumentException) {
-            ResponseEntity.badRequest().build()
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message, e)
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao atualizar conta parcialmente.", e)
         }
     }
 
@@ -150,18 +174,37 @@ class ContaController(
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "200", description = "Conta atualizada com sucesso"),
-            ApiResponse(responseCode = "404", description = "Conta não encontrada"),
+            ApiResponse(responseCode = "404", description = "Conta não encontrada para atualização"),
             ApiResponse(responseCode = "400", description = "Dados inválidos")
         ]
     )
     @PutMapping("/{id}")
-    fun atualizarConta(@PathVariable id: Int, @RequestBody contaAtualizada: Conta): ResponseEntity<Conta> {
-        return try {
-            val contaComId = contaAtualizada.copy(idConta = id)
-            val contaSalva = contaService.save(contaComId)
-            ResponseEntity.ok(contaSalva)
+    fun atualizarConta(@PathVariable id: Int, @RequestBody contaDTO: ContaDTO): ResponseEntity<Conta> {
+        if (!contaService.existsById(id)) {
+            return ResponseEntity.notFound().build()
+        }
+        try {
+            val usuario = usuarioService.findById(contaDTO.fkUsuario
+                ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário deve ser informado")).orElseThrow {
+                ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário não encontrado")
+            }
+            val contaParaSalvar = Conta(
+                idConta = id,
+                usuario = usuario,
+                dataCriacao = contaDTO.dataCriacao,
+                etiqueta = contaDTO.etiqueta,
+                valor = contaDTO.valor,
+                dataVencimento = contaDTO.dataVencimento,
+                urlNuvem = contaDTO.urlNuvem,
+                descricao = contaDTO.descricao,
+                isPago = contaDTO.isPago
+            )
+            val contaSalva = contaService.save(contaParaSalvar)
+            return ResponseEntity.ok(contaSalva)
         } catch (e: ResponseStatusException) {
             throw e
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao atualizar conta.", e)
         }
     }
 
@@ -172,17 +215,16 @@ class ContaController(
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "204", description = "Conta excluída com sucesso"),
-            ApiResponse(responseCode = "404", description = "Conta não encontrada"),
+            ApiResponse(responseCode = "404", description = "Conta não encontrada para exclusão"),
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
     @DeleteMapping("/{id}")
     fun excluirConta(@PathVariable id: Int): ResponseEntity<Void> {
-        return if (contaService.existsById(id)) {
-            contaService.deleteById(id)
-            ResponseEntity.noContent().build()
-        } else {
-            ResponseEntity.notFound().build()
+        if (!contaService.existsById(id)) {
+            return ResponseEntity.notFound().build()
         }
+        contaService.deleteById(id)
+        return ResponseEntity.noContent().build()
     }
 }

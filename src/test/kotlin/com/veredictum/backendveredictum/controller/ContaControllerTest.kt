@@ -1,5 +1,6 @@
 package com.veredictum.backendveredictum.controller
 
+import com.veredictum.backendveredictum.dto.ContaDTO
 import com.veredictum.backendveredictum.entity.Conta
 import com.veredictum.backendveredictum.entity.Usuario
 import com.veredictum.backendveredictum.services.ContaService
@@ -13,8 +14,15 @@ import org.mockito.Mockito.*
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDate
 import java.util.*
+
+import org.mockito.ArgumentMatchers
+
+// Funções auxiliares para uso correto dos matchers do Mockito em Kotlin
+fun <T> any(): T = ArgumentMatchers.any<T>()
+fun <T> eq(value: T): T = ArgumentMatchers.eq(value)
 
 @ExtendWith(MockitoExtension::class)
 class ContaControllerTest {
@@ -30,247 +38,359 @@ class ContaControllerTest {
 
     @Test
     fun `criarConta deve criar conta com sucesso`() {
-        // Arrange
         val usuario = Usuario(idUsuario = 1)
-        val novaConta = Conta(
-            usuario = usuario,
-            etiqueta = "Teste",
+        val contaDTO = ContaDTO(
+            idConta = null,
+            fkUsuario = 1,
+            dataCriacao = LocalDate.now(),
+            etiqueta = "Conta Teste",
             valor = 100.0,
-            dataVencimento = LocalDate.now().plusDays(30),
+            dataVencimento = LocalDate.now().plusDays(10),
+            urlNuvem = null,
+            descricao = null,
             isPago = false
         )
+        val contaSalva = Conta(
+            idConta = 1,
+            usuario = usuario,
+            dataCriacao = contaDTO.dataCriacao,
+            etiqueta = contaDTO.etiqueta,
+            valor = contaDTO.valor,
+            dataVencimento = contaDTO.dataVencimento,
+            urlNuvem = contaDTO.urlNuvem,
+            descricao = contaDTO.descricao,
+            isPago = contaDTO.isPago
+        )
 
-        `when`(contaService.save(any())).thenReturn(novaConta.copy(idConta = 1))
+        `when`(usuarioService.findById(eq(1))).thenReturn(Optional.of(usuario))
+        `when`(contaService.save(any())).thenReturn(contaSalva)
 
-        // Act
-        val response = controller.criarConta(novaConta)
+        val response = controller.criarConta(contaDTO)
 
-        // Assert
         assertEquals(HttpStatus.CREATED, response.statusCode)
         assertNotNull(response.body)
-        assertEquals(1, response.body?.idConta)
+        assertEquals(contaSalva.idConta, response.body?.idConta)
+        verify(usuarioService).findById(eq(1))
+        verify(contaService).save(any())
+    }
+
+    @Test
+    fun `criarConta deve retornar erro quando servico falha`() {
+        val contaDTO = ContaDTO(
+            idConta = null,
+            fkUsuario = 1,
+            dataCriacao = LocalDate.now(),
+            etiqueta = "Conta Teste",
+            valor = 100.0,
+            dataVencimento = LocalDate.now().plusDays(10),
+            urlNuvem = null,
+            descricao = null,
+            isPago = false
+        )
+        val usuario = Usuario(idUsuario = 1)
+        val mensagemErro = "Erro ao salvar"
+        `when`(usuarioService.findById(eq(1))).thenReturn(Optional.of(usuario))
+        `when`(contaService.save(any())).thenThrow(ResponseStatusException(HttpStatus.BAD_REQUEST, mensagemErro))
+
+        val exception = assertThrows(ResponseStatusException::class.java) {
+            controller.criarConta(contaDTO)
+        }
+        assertEquals(HttpStatus.BAD_REQUEST, exception.statusCode)
+        assertEquals(mensagemErro, exception.reason)
+        verify(usuarioService).findById(eq(1))
+        verify(contaService).save(any())
     }
 
     @Test
     fun `buscarContaPorId deve retornar conta quando encontrada`() {
-        // Arrange
-        val id = 1
-        val conta = Conta(
-            idConta = id,
+        val idConta = 1
+        val contaEsperada = Conta(
+            idConta = idConta,
             usuario = Usuario(idUsuario = 1),
-            etiqueta = "Teste",
-            valor = 100.0,
-            dataVencimento = LocalDate.now(),
+            etiqueta = "Conta Encontrada",
+            valor = 200.0,
+            dataVencimento = LocalDate.now().plusDays(5),
             isPago = false
         )
+        `when`(contaService.findById(idConta)).thenReturn(Optional.of(contaEsperada))
 
-        `when`(contaService.findById(id)).thenReturn(Optional.of(conta))
+        val response = controller.buscarContaPorId(idConta)
 
-        // Act
-        val response = controller.buscarContaPorId(id)
-
-        // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
-        assertEquals(id, response.body?.idConta)
+        assertEquals(contaEsperada.idConta, response.body?.idConta)
+        verify(contaService).findById(idConta)
     }
 
     @Test
-    fun `listarTodasContas deve retornar lista ordenada`() {
-        // Arrange
-        val contas = listOf(
-            Conta(
-                idConta = 1,
-                usuario = Usuario(idUsuario = 1),
-                dataCriacao = LocalDate.now(),
-                etiqueta = "Conta 1",
-                valor = 100.0,
-                dataVencimento = LocalDate.now().plusDays(30),
-                urlNuvem = null,
-                descricao = "Descrição da conta 1",
-                isPago = true
-            ),
-            Conta(
-                idConta = 2,
-                usuario = Usuario(idUsuario = 1),
-                dataCriacao = LocalDate.now(),
-                etiqueta = "Conta 2",
-                valor = 200.0,
-                dataVencimento = LocalDate.now().plusDays(15),
-                urlNuvem = null,
-                descricao = "Descrição da conta 2",
-                isPago = false
-            )
+    fun `buscarContaPorId deve retornar NOT FOUND quando conta nao encontrada`() {
+        val idConta = 1
+        `when`(contaService.findById(idConta)).thenReturn(Optional.empty())
+
+        val response = controller.buscarContaPorId(idConta)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertNull(response.body)
+        verify(contaService).findById(idConta)
+    }
+
+    @Test
+    fun `listarTodasContas deve retornar lista de contas`() {
+        val contasEsperadas = listOf(
+            Conta(idConta = 1, usuario = Usuario(idUsuario = 1), etiqueta = "Conta A", valor = 10.0, dataVencimento = LocalDate.now(), isPago = false),
+            Conta(idConta = 2, usuario = Usuario(idUsuario = 1), etiqueta = "Conta B", valor = 20.0, dataVencimento = LocalDate.now().plusDays(1), isPago = true)
         )
+        `when`(contaService.findAll(any<Sort>())).thenReturn(contasEsperadas)
 
-        `when`(contaService.findAll(any<Sort>())).thenReturn(contas)
-
-        // Act
         val response = controller.listarTodasContas()
 
-        // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
         assertEquals(2, response.body?.size)
-        assertFalse(response.body?.first()?.isPago ?: true) // Primeiro item não pago
+        verify(contaService).findAll(any<Sort>())
     }
 
     @Test
-    fun `listarContasPorUsuario deve retornar contas do usuario`() {
-        // Arrange
-        val usuarioId = 1
-        val contas = listOf(
-            Conta(
-                idConta = 1,
-                usuario = Usuario(idUsuario = usuarioId),
-                dataCriacao = LocalDate.now(),
-                etiqueta = "Conta Usuário 1",
-                valor = 150.0,
-                dataVencimento = LocalDate.now().plusDays(10),
-                urlNuvem = null,
-                descricao = "Descrição conta 1",
-                isPago = false
-            ),
-            Conta(
-                idConta = 2,
-                usuario = Usuario(idUsuario = usuarioId),
-                dataCriacao = LocalDate.now(),
-                etiqueta = "Conta Usuário 2",
-                valor = 250.0,
-                dataVencimento = LocalDate.now().plusDays(20),
-                urlNuvem = null,
-                descricao = "Descrição conta 2",
-                isPago = false
-            )
+    fun `listarTodasContas deve retornar NO CONTENT quando lista vazia`() {
+        `when`(contaService.findAll(any<Sort>())).thenReturn(emptyList())
+
+        val response = controller.listarTodasContas()
+
+        assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
+        assertNull(response.body)
+        verify(contaService).findAll(any<Sort>())
+    }
+
+    @Test
+    fun `listarContasPorUsuario deve retornar lista de contas do usuario`() {
+        val idUsuario = 1
+        val contasEsperadas = listOf(
+            Conta(idConta = 1, usuario = Usuario(idUsuario = idUsuario), etiqueta = "Conta Usuario A", valor = 30.0, dataVencimento = LocalDate.now()),
+            Conta(idConta = 3, usuario = Usuario(idUsuario = idUsuario), etiqueta = "Conta Usuario C", valor = 40.0, dataVencimento = LocalDate.now())
         )
+        `when`(contaService.findByUsuarioId(idUsuario)).thenReturn(contasEsperadas)
 
-        `when`(contaService.findByUsuarioId(usuarioId)).thenReturn(contas)
+        val response = controller.listarContasPorUsuario(idUsuario)
 
-        // Act
-        val response = controller.listarContasPorUsuario(usuarioId)
-
-        // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
         assertEquals(2, response.body?.size)
+        assertTrue(response.body?.all { it.usuario?.idUsuario == idUsuario } ?: false)
+        verify(contaService).findByUsuarioId(idUsuario)
     }
 
     @Test
-    fun `listarContasPorPago deve retornar contas por status de pagamento`() {
-        // Arrange
-        val isPago = false
-        val contas = listOf(
-            Conta(
-                idConta = 1,
-                usuario = Usuario(idUsuario = 1),
-                dataCriacao = LocalDate.now(),
-                etiqueta = "Conta Não Paga 1",
-                valor = 300.0,
-                dataVencimento = LocalDate.now().plusDays(5),
-                urlNuvem = null,
-                descricao = "Descrição conta não paga 1",
-                isPago = false
-            ),
-            Conta(
-                idConta = 2,
-                usuario = Usuario(idUsuario = 1),
-                dataCriacao = LocalDate.now(),
-                etiqueta = "Conta Não Paga 2",
-                valor = 400.0,
-                dataVencimento = LocalDate.now().plusDays(15),
-                urlNuvem = null,
-                descricao = "Descrição conta não paga 2",
-                isPago = false
-            )
+    fun `listarContasPorUsuario deve retornar NO CONTENT quando usuario nao tem contas`() {
+        val idUsuario = 1
+        `when`(contaService.findByUsuarioId(idUsuario)).thenReturn(emptyList())
+
+        val response = controller.listarContasPorUsuario(idUsuario)
+
+        assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
+        assertNull(response.body)
+        verify(contaService).findByUsuarioId(idUsuario)
+    }
+
+    @Test
+    fun `listarContasPorPago deve retornar lista de contas pagas`() {
+        val isPago = true
+        val contasEsperadas = listOf(
+            Conta(idConta = 2, usuario = Usuario(idUsuario = 1), etiqueta = "Conta Paga B", valor = 20.0, dataVencimento = LocalDate.now(), isPago = true)
         )
+        `when`(contaService.findByIsPago(isPago)).thenReturn(contasEsperadas)
 
-        `when`(contaService.findByIsPago(isPago)).thenReturn(contas)
-
-        // Act
         val response = controller.listarContasPorPago(isPago)
 
-        // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
-        assertTrue(response.body?.all { !it.isPago } ?: false)
+        assertEquals(1, response.body?.size)
+        assertTrue(response.body?.all { it.isPago == isPago } ?: false)
+        verify(contaService).findByIsPago(isPago)
     }
 
     @Test
-    fun `atualizarParcialConta deve atualizar campos específicos`() {
-        // Arrange
-        val id = 1
-        val updates = mapOf(
-            "etiqueta" to "Nova Etiqueta",
-            "valor" to 150.0,
-            "isPago" to true
-        )
+    fun `listarContasPorPago deve retornar NO CONTENT quando nao ha contas com status especifico`() {
+        val isPago = false
+        `when`(contaService.findByIsPago(isPago)).thenReturn(emptyList())
 
-        val contaAtualizada = Conta(
-            idConta = id,
-            usuario = Usuario(idUsuario = 1),
-            dataCriacao = LocalDate.now(),
-            etiqueta = "Nova Etiqueta",
-            valor = 150.0,
-            dataVencimento = LocalDate.now().plusDays(30),
-            urlNuvem = null,
-            descricao = "Descrição atualizada",
-            isPago = true
-        )
+        val response = controller.listarContasPorPago(isPago)
 
-        `when`(contaService.partialUpdate(eq(id), any())).thenReturn(contaAtualizada)
-
-        // Act
-        val response = controller.atualizarParcialConta(id, updates)
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.statusCode)
-        assertNotNull(response.body)
-        assertEquals("Nova Etiqueta", response.body?.etiqueta)
-        assertEquals(150.0, response.body?.valor)
-        assertTrue(response.body?.isPago ?: false)
-    }
-
-    @Test
-    fun `atualizarConta deve atualizar conta completa`() {
-        // Arrange
-        val id = 1
-        val contaAtualizada = Conta(
-            idConta = id,
-            usuario = Usuario(idUsuario = 1),
-            dataCriacao = LocalDate.now(),
-            etiqueta = "Atualizada",
-            valor = 200.0,
-            dataVencimento = LocalDate.now().plusDays(30),
-            urlNuvem = null,
-            descricao = "Descrição da conta atualizada",
-            isPago = true
-        )
-
-        `when`(contaService.save(any())).thenReturn(contaAtualizada)
-
-        // Act
-        val response = controller.atualizarConta(id, contaAtualizada)
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.statusCode)
-        assertNotNull(response.body)
-        assertEquals("Atualizada", response.body?.etiqueta)
-        assertEquals(200.0, response.body?.valor)
-        assertTrue(response.body?.isPago ?: false)
-    }
-
-    @Test
-    fun `excluirConta deve remover conta existente`() {
-        // Arrange
-        val id = 1
-        `when`(contaService.existsById(id)).thenReturn(true)
-        doNothing().`when`(contaService).deleteById(id)
-
-        // Act
-        val response = controller.excluirConta(id)
-
-        // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
-        verify(contaService).deleteById(id)
+        assertNull(response.body)
+        verify(contaService).findByIsPago(isPago)
+    }
+
+    @Test
+    fun `atualizarParcialConta deve atualizar conta com sucesso`() {
+        val idConta = 1
+        val updates = mapOf("etiqueta" to "Etiqueta Atualizada", "isPago" to true)
+        val contaAtualizada = Conta(
+            idConta = idConta,
+            usuario = Usuario(idUsuario = 1),
+            etiqueta = "Etiqueta Atualizada",
+            valor = 100.0,
+            dataVencimento = LocalDate.now(),
+            isPago = true
+        )
+        `when`(contaService.partialUpdate(eq(idConta), eq(updates))).thenReturn(contaAtualizada)
+
+        val response = controller.atualizarParcialConta(idConta, updates)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertNotNull(response.body)
+        assertEquals("Etiqueta Atualizada", response.body?.etiqueta)
+        assertTrue(response.body?.isPago ?: false)
+        verify(contaService).partialUpdate(eq(idConta), eq(updates))
+    }
+
+    @Test
+    fun `atualizarParcialConta deve retornar NOT FOUND quando conta nao existe`() {
+        val idConta = 1
+        val updates = mapOf("etiqueta" to "Nova Etiqueta")
+        `when`(contaService.partialUpdate(eq(idConta), eq(updates))).thenThrow(NoSuchElementException("Conta não encontrada"))
+
+        val response = controller.atualizarParcialConta(idConta, updates)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertNull(response.body)
+        verify(contaService).partialUpdate(eq(idConta), eq(updates))
+    }
+
+    @Test
+    fun `atualizarParcialConta deve retornar BAD REQUEST para dados invalidos`() {
+        val idConta = 1
+        val updates = mapOf("valor" to "textoInvalido")
+        val mensagemErro = "Valor inválido para atualização"
+        `when`(contaService.partialUpdate(eq(idConta), eq(updates))).thenThrow(IllegalArgumentException(mensagemErro))
+
+        val exception = assertThrows(ResponseStatusException::class.java) {
+            controller.atualizarParcialConta(idConta, updates)
+        }
+        assertEquals(HttpStatus.BAD_REQUEST, exception.statusCode)
+        assertEquals(mensagemErro, exception.reason)
+        verify(contaService).partialUpdate(eq(idConta), eq(updates))
+    }
+
+    @Test
+    fun `atualizarConta deve atualizar conta com sucesso`() {
+        val idConta = 1
+        val usuario = Usuario(idUsuario = 1)
+        val contaDTO = ContaDTO(
+            idConta = idConta,
+            fkUsuario = 1,
+            dataCriacao = LocalDate.now(),
+            etiqueta = "Conta Totalmente Atualizada",
+            valor = 150.0,
+            dataVencimento = LocalDate.now().plusMonths(1),
+            urlNuvem = null,
+            descricao = null,
+            isPago = true
+        )
+        val contaAtualizadaEsperada = Conta(
+            idConta = idConta,
+            usuario = usuario,
+            dataCriacao = contaDTO.dataCriacao,
+            etiqueta = contaDTO.etiqueta,
+            valor = contaDTO.valor,
+            dataVencimento = contaDTO.dataVencimento,
+            urlNuvem = contaDTO.urlNuvem,
+            descricao = contaDTO.descricao,
+            isPago = contaDTO.isPago
+        )
+
+        `when`(contaService.existsById(idConta)).thenReturn(true)
+        `when`(usuarioService.findById(eq(1))).thenReturn(Optional.of(usuario))
+        `when`(contaService.save(any())).thenReturn(contaAtualizadaEsperada)
+
+        val response = controller.atualizarConta(idConta, contaDTO)
+
+        assertEquals(HttpStatus.OK, response.statusCode)
+        assertNotNull(response.body)
+        assertEquals(contaAtualizadaEsperada.idConta, response.body?.idConta)
+        assertEquals(contaAtualizadaEsperada.etiqueta, response.body?.etiqueta)
+        verify(contaService).existsById(idConta)
+        verify(usuarioService).findById(eq(1))
+        verify(contaService).save(any())
+    }
+
+    @Test
+    fun `atualizarConta deve retornar NOT FOUND quando conta nao existe`() {
+        val idConta = 1
+        val contaDTO = ContaDTO(
+            idConta = idConta,
+            fkUsuario = 1,
+            dataCriacao = LocalDate.now(),
+            etiqueta = "Conta Inexistente",
+            valor = 50.0,
+            dataVencimento = LocalDate.now(),
+            urlNuvem = null,
+            descricao = null,
+            isPago = false
+        )
+        `when`(contaService.existsById(idConta)).thenReturn(false)
+
+        val response = controller.atualizarConta(idConta, contaDTO)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertNull(response.body)
+        verify(contaService).existsById(idConta)
+        verify(contaService, never()).save(any())
+    }
+
+    @Test
+    fun `atualizarConta deve retornar erro quando servico falha ao salvar`() {
+        val idConta = 1
+        val usuario = Usuario(idUsuario = 1)
+        val contaDTO = ContaDTO(
+            idConta = idConta,
+            fkUsuario = 1,
+            dataCriacao = LocalDate.now(),
+            etiqueta = "Conta com Erro",
+            valor = 10.0,
+            dataVencimento = LocalDate.now(),
+            urlNuvem = null,
+            descricao = null,
+            isPago = false
+        )
+        val mensagemErro = "Erro ao atualizar conta no serviço"
+        `when`(contaService.existsById(idConta)).thenReturn(true)
+        `when`(usuarioService.findById(eq(1))).thenReturn(Optional.of(usuario))
+        `when`(contaService.save(any())).thenThrow(ResponseStatusException(HttpStatus.BAD_REQUEST, mensagemErro))
+
+        val exception = assertThrows(ResponseStatusException::class.java) {
+            controller.atualizarConta(idConta, contaDTO)
+        }
+        assertEquals(HttpStatus.BAD_REQUEST, exception.statusCode)
+        assertEquals(mensagemErro, exception.reason)
+        verify(contaService).existsById(idConta)
+        verify(usuarioService).findById(eq(1))
+        verify(contaService).save(any())
+    }
+
+    @Test
+    fun `excluirConta deve excluir conta com sucesso`() {
+        val idConta = 1
+        `when`(contaService.existsById(idConta)).thenReturn(true)
+        doNothing().`when`(contaService).deleteById(idConta)
+
+        val response = controller.excluirConta(idConta)
+
+        assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
+        assertNull(response.body)
+        verify(contaService).existsById(idConta)
+        verify(contaService).deleteById(idConta)
+    }
+
+    @Test
+    fun `excluirConta deve retornar NOT FOUND quando conta nao existe`() {
+        val idConta = 1
+        `when`(contaService.existsById(idConta)).thenReturn(false)
+
+        val response = controller.excluirConta(idConta)
+
+        assertEquals(HttpStatus.NOT_FOUND, response.statusCode)
+        assertNull(response.body)
+        verify(contaService).existsById(idConta)
+        verify(contaService, never()).deleteById(idConta)
     }
 }
