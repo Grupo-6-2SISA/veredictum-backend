@@ -97,27 +97,6 @@ class ContaController(
     }
 
     @Operation(
-        summary = "Listar contas por ID de usuário",
-        description = "Retorna uma lista de todas as contas associadas a um determinado ID de usuário."
-    )
-    @ApiResponses(
-        value = [
-            ApiResponse(responseCode = "200", description = "Lista de contas do usuário retornada com sucesso"),
-            ApiResponse(responseCode = "204", description = "Nenhuma conta encontrada para o usuário"),
-            ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-        ]
-    )
-    @GetMapping("/por-usuario/{usuarioId}")
-    fun listarContasPorUsuario(@PathVariable usuarioId: Int): ResponseEntity<List<Conta>> {
-        val contas = contaService.findByUsuarioId(usuarioId)
-        return if (contas.isNotEmpty()) {
-            ResponseEntity.ok(contas)
-        } else {
-            ResponseEntity.noContent().build()
-        }
-    }
-
-    @Operation(
         summary = "Listar contas por status de pagamento",
         description = "Retorna uma lista de todas as contas com o status de pagamento especificado."
     )

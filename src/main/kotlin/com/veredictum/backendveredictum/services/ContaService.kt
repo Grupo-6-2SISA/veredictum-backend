@@ -13,20 +13,11 @@ import java.util.*
 @Service
 class ContaService(
     private val contaRepository: ContaRepository,
-    private val usuarioService: UsuarioService
 ) {
 
 
     fun save(conta: Conta): Conta {
 
-        val usuarioId = conta.usuario?.idUsuario
-            ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário deve ser informado para criar/atualizar uma conta")
-
-
-        val usuario = usuarioService.findById(usuarioId).orElseThrow {
-            ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário com ID $usuarioId não encontrado")
-
-        }
 
         val contaToSave: Conta
         val contaId = conta.idConta
@@ -36,7 +27,6 @@ class ContaService(
                 ResponseStatusException(HttpStatus.NOT_FOUND, "Conta com ID $contaId não encontrada para atualização")
             }
             contaToSave = existingConta.copy(
-                usuario = usuario,
                 etiqueta = conta.etiqueta,
                 valor = conta.valor,
                 dataVencimento = conta.dataVencimento,
@@ -46,7 +36,6 @@ class ContaService(
             )
         } else {
             contaToSave = Conta(
-                usuario = usuario,
                 dataCriacao = LocalDate.now(),
                 etiqueta = conta.etiqueta,
                 valor = conta.valor,
@@ -75,16 +64,9 @@ class ContaService(
     }
 
 
-    fun findByUsuarioId(usuarioId: Int): List<Conta> {
-        // Corrigido: Chamando o método findByUsuario_IdUsuario do repositório
-        return contaRepository.findByUsuario_IdUsuario(usuarioId)
-    }
-
-
     fun findByIsPago(isPago: Boolean): List<Conta> {
         return contaRepository.findByIsPago(isPago)
     }
-
 
     fun existsById(id: Int): Boolean {
         return contaRepository.existsById(id)
@@ -102,12 +84,6 @@ class ContaService(
 
         updates.forEach { (key, value) ->
             when (key) {
-                "usuario" -> {
-                    val usuarioId = (value as? Int)
-                        ?: throw IllegalArgumentException("ID de usuário inválido")
-                    conta.usuario = usuarioService.findById(usuarioId)
-                        .orElseThrow { IllegalArgumentException("Usuário com ID $usuarioId não encontrado") }
-                }
                 "etiqueta" -> conta.etiqueta = value as? String
                 "valor" -> conta.valor = (value as? Number)?.toDouble()
                 "dataVencimento" -> conta.dataVencimento = value as? LocalDate
