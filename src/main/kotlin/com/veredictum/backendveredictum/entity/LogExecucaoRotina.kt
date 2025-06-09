@@ -26,7 +26,7 @@ data class LogExecucaoRotina(
 
     var isBloqueado: Boolean = false,
 
-    var funcionou: Boolean = false,
+    var funcionou: Boolean? = null,
 
 )
 
