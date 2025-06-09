@@ -23,25 +23,49 @@ class ClienteControllerTest {
     @InjectMocks
     private lateinit var controller: ClienteController
 
+    private fun clienteCompleto(
+        id: Int? = 1,
+        nome: String = "Teste",
+        email: String = "teste@email.com",
+        rg: String = "123456",
+        cpf: String = "12345678901",
+        cnpj: String? = null,
+        telefone: String = "11999999999",
+        dataNascimento: LocalDate = LocalDate.now().minusYears(20),
+        dataInicio: LocalDate = LocalDate.now(),
+        endereco: String = "Rua Teste",
+        cep: String = "12345678",
+        descricao: String = "Descrição",
+        inscricaoEstadual: String = "123456789",
+        isProBono: Boolean = false,
+        isAtivo: Boolean = true,
+        isJuridico: Boolean = false,
+        indicador: Cliente? = null
+    ) = Cliente(
+        idCliente = id,
+        indicador = indicador,
+        nome = nome,
+        email = email,
+        rg = rg,
+        cpf = cpf,
+        cnpj = cnpj,
+        telefone = telefone,
+        dataNascimento = dataNascimento,
+        dataInicio = dataInicio,
+        endereco = endereco,
+        cep = cep,
+        descricao = descricao,
+        inscricaoEstadual = inscricaoEstadual,
+        isProBono = isProBono,
+        isAtivo = isAtivo,
+        isJuridico = isJuridico
+    )
+
     @Test
     fun `buscarTodos deve retornar lista de clientes quando existirem`() {
-        // Arrange
-        val cliente = Cliente(
-            idCliente = 1,
-            nome = "Teste",
-            email = "teste@email.com",
-            rg = "123456",
-            dataNascimento = LocalDate.now().minusYears(20),
-            dataInicio = LocalDate.now(),
-            isAtivo = true
-        )
-
+        val cliente = clienteCompleto()
         `when`(repository.findAllOrderByIsAtivo()).thenReturn(listOf(cliente))
-
-        // Act
         val response = controller.buscarTodos()
-
-        // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
         assertEquals(1, response.body?.size)
@@ -49,43 +73,23 @@ class ClienteControllerTest {
 
     @Test
     fun `buscarTodos deve retornar no content quando não houver clientes`() {
-        // Arrange
         `when`(repository.findAllOrderByIsAtivo()).thenReturn(emptyList())
-
-        // Act
         val response = controller.buscarTodos()
-
-        // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
         assertNull(response.body)
     }
 
     @Test
     fun `buscarPorId deve retornar cliente quando encontrado`() {
-        // Arrange
-        val cliente = Cliente(
-            idCliente = 1,
-            nome = "Teste",
-            email = "teste@email.com",
-            rg = "123456",
-            dataNascimento = LocalDate.now().minusYears(20),
-            dataInicio = LocalDate.now(),
-            isAtivo = true
-        )
-
+        val cliente = clienteCompleto()
         `when`(repository.findById(1)).thenReturn(Optional.of(cliente))
-
-        // Act
         val response = controller.buscarPorId(1)
-
-        // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
     }
 
     @Test
     fun `cadastrarInativo deve criar novo cliente com sucesso`() {
-        // Arrange
         val clienteDTO = ClienteDTO(
             idCliente = 0,
             nome = "Novo Cliente",
@@ -94,148 +98,97 @@ class ClienteControllerTest {
             rg = "123456",
             cpf = "12345678901",
             cnpj = null,
+            telefone = "11999999999",
             dataNascimento = LocalDate.now().minusYears(25),
             dataInicio = LocalDate.now(),
             endereco = "Endereço Teste",
             cep = "12345678",
             descricao = "Descrição teste",
-            inscricaoEstadual = null,
+            inscricaoEstadual = "123456789",
             isProBono = false,
             isAtivo = false,
             isJuridico = false
         )
-
-        val clienteSalvo = Cliente(
-            idCliente = 1,
+        val clienteSalvo = clienteCompleto(
+            id = 1,
             nome = clienteDTO.nome,
             email = clienteDTO.email,
             rg = clienteDTO.rg,
-            dataNascimento = clienteDTO.dataNascimento,
-            dataInicio = clienteDTO.dataInicio,
-            isAtivo = false
+            cpf = clienteDTO.cpf ?: "",
+            cnpj = clienteDTO.cnpj,
+            telefone = clienteDTO.telefone ?: "11999999999",
+            dataNascimento = clienteDTO.dataNascimento!!,
+            dataInicio = clienteDTO.dataInicio!!,
+            endereco = clienteDTO.endereco ?: "Endereço Teste",
+            cep = clienteDTO.cep ?: "12345678",
+            descricao = clienteDTO.descricao ?: "Descrição teste",
+            inscricaoEstadual = clienteDTO.inscricaoEstadual ?: "123456789",
+            isProBono = clienteDTO.isProBono ?: false,
+            isAtivo = false,
+            isJuridico = clienteDTO.isJuridico ?: false
         )
-
         `when`(repository.save(any())).thenReturn(clienteSalvo)
-
-        // Act
         val response = controller.cadastrarInativo(clienteDTO)
-
-        // Assert
         assertEquals(HttpStatus.CREATED, response.statusCode)
         assertNotNull(response.body)
     }
 
     @Test
     fun `atualizar deve atualizar cliente existente com sucesso`() {
-        // Arrange
         val id = 1
-        val clienteAtualizado = Cliente(
-            idCliente = id,
+        val clienteAtualizado = clienteCompleto(
+            id = id,
             nome = "Cliente Atualizado",
             email = "atualizado@email.com",
-            rg = "654321",
-            dataNascimento = LocalDate.now().minusYears(30),
-            dataInicio = LocalDate.now(),
-            isAtivo = true
+            rg = "654321"
         )
-
         `when`(repository.findById(id)).thenReturn(Optional.of(clienteAtualizado))
         `when`(repository.save(any())).thenReturn(clienteAtualizado)
-
-        // Act
         val response = controller.atualizar(id, clienteAtualizado)
-
-        // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
     }
 
     @Test
     fun `atualizarParcial deve atualizar campos específicos do cliente`() {
-        // Arrange
         val id = 1
-        val clienteExistente = Cliente(
-            idCliente = id,
-            nome = "Cliente Original",
-            email = "original@email.com",
-            rg = "123456",
-            dataNascimento = LocalDate.now().minusYears(25),
-            dataInicio = LocalDate.now(),
-            isAtivo = true
-        )
-
+        val clienteExistente = clienteCompleto(id = id)
         val atualizacoes = mapOf(
             "nome" to "Nome Atualizado",
             "email" to "atualizado@email.com"
         )
-
         `when`(repository.findById(id)).thenReturn(Optional.of(clienteExistente))
         `when`(repository.save(any())).thenReturn(clienteExistente)
-
-        // Act
         val response = controller.atualizarParcial(id, atualizacoes)
-
-        // Assert
         assertEquals(HttpStatus.OK, response.statusCode)
         assertNotNull(response.body)
     }
 
     @Test
     fun `inativar deve desativar cliente com sucesso`() {
-        // Arrange
         val id = 1
-        val cliente = Cliente(
-            idCliente = id,
-            nome = "Cliente",
-            email = "cliente@email.com",
-            rg = "123456",
-            dataNascimento = LocalDate.now().minusYears(25),
-            dataInicio = LocalDate.now(),
-            isAtivo = true
-        )
-
+        val cliente = clienteCompleto(id = id, isAtivo = true)
         `when`(repository.findById(id)).thenReturn(Optional.of(cliente))
         `when`(repository.save(any())).thenReturn(cliente.apply { isAtivo = false })
-
-        // Act
         val response = controller.inativar(id)
-
-        // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
         verify(repository).save(any())
     }
 
     @Test
     fun `ativar deve ativar cliente com sucesso`() {
-        // Arrange
         val id = 1
-        val cliente = Cliente(
-            idCliente = id,
-            nome = "Cliente",
-            email = "cliente@email.com",
-            rg = "123456",
-            dataNascimento = LocalDate.now().minusYears(25),
-            dataInicio = LocalDate.now(),
-            isAtivo = false
-        )
-
+        val cliente = clienteCompleto(id = id, isAtivo = false)
         `when`(repository.findById(id)).thenReturn(Optional.of(cliente))
         `when`(repository.save(any())).thenReturn(cliente.apply { isAtivo = true })
-
-        // Act
         val response = controller.ativar(id)
-
-        // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
         verify(repository).save(any())
     }
 
     @Test
     fun `getRepository deve retornar o repositório injetado`() {
-        // Act
         val result = controller.repository
-
-        // Assert
         assertNotNull(result)
         assertTrue(result is ClienteRepository)
     }

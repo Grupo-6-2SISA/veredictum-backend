@@ -2,7 +2,6 @@ package com.veredictum.backendveredictum.controller
 
 import com.veredictum.backendveredictum.dto.ContaDTO
 import com.veredictum.backendveredictum.entity.Conta
-import com.veredictum.backendveredictum.entity.Usuario
 import com.veredictum.backendveredictum.services.ContaService
 import com.veredictum.backendveredictum.services.UsuarioService
 import org.junit.jupiter.api.Assertions.*
@@ -20,7 +19,6 @@ import java.util.*
 
 import org.mockito.ArgumentMatchers
 
-// Funções auxiliares para uso correto dos matchers do Mockito em Kotlin
 fun <T> any(): T = ArgumentMatchers.any<T>()
 fun <T> eq(value: T): T = ArgumentMatchers.eq(value)
 
@@ -38,10 +36,8 @@ class ContaControllerTest {
 
     @Test
     fun `criarConta deve criar conta com sucesso`() {
-        val usuario = Usuario(idUsuario = 1)
         val contaDTO = ContaDTO(
             idConta = null,
-            fkUsuario = 1,
             dataCriacao = LocalDate.now(),
             etiqueta = "Conta Teste",
             valor = 100.0,
@@ -52,7 +48,6 @@ class ContaControllerTest {
         )
         val contaSalva = Conta(
             idConta = 1,
-            usuario = usuario,
             dataCriacao = contaDTO.dataCriacao,
             etiqueta = contaDTO.etiqueta,
             valor = contaDTO.valor,
@@ -62,7 +57,6 @@ class ContaControllerTest {
             isPago = contaDTO.isPago
         )
 
-        `when`(usuarioService.findById(eq(1))).thenReturn(Optional.of(usuario))
         `when`(contaService.save(any())).thenReturn(contaSalva)
 
         val response = controller.criarConta(contaDTO)
@@ -70,7 +64,6 @@ class ContaControllerTest {
         assertEquals(HttpStatus.CREATED, response.statusCode)
         assertNotNull(response.body)
         assertEquals(contaSalva.idConta, response.body?.idConta)
-        verify(usuarioService).findById(eq(1))
         verify(contaService).save(any())
     }
 
@@ -78,7 +71,6 @@ class ContaControllerTest {
     fun `criarConta deve retornar erro quando servico falha`() {
         val contaDTO = ContaDTO(
             idConta = null,
-            fkUsuario = 1,
             dataCriacao = LocalDate.now(),
             etiqueta = "Conta Teste",
             valor = 100.0,
@@ -87,9 +79,7 @@ class ContaControllerTest {
             descricao = null,
             isPago = false
         )
-        val usuario = Usuario(idUsuario = 1)
         val mensagemErro = "Erro ao salvar"
-        `when`(usuarioService.findById(eq(1))).thenReturn(Optional.of(usuario))
         `when`(contaService.save(any())).thenThrow(ResponseStatusException(HttpStatus.BAD_REQUEST, mensagemErro))
 
         val exception = assertThrows(ResponseStatusException::class.java) {
@@ -97,7 +87,6 @@ class ContaControllerTest {
         }
         assertEquals(HttpStatus.BAD_REQUEST, exception.statusCode)
         assertEquals(mensagemErro, exception.reason)
-        verify(usuarioService).findById(eq(1))
         verify(contaService).save(any())
     }
 
@@ -106,7 +95,6 @@ class ContaControllerTest {
         val idConta = 1
         val contaEsperada = Conta(
             idConta = idConta,
-            usuario = Usuario(idUsuario = 1),
             etiqueta = "Conta Encontrada",
             valor = 200.0,
             dataVencimento = LocalDate.now().plusDays(5),
@@ -137,8 +125,8 @@ class ContaControllerTest {
     @Test
     fun `listarTodasContas deve retornar lista de contas`() {
         val contasEsperadas = listOf(
-            Conta(idConta = 1, usuario = Usuario(idUsuario = 1), etiqueta = "Conta A", valor = 10.0, dataVencimento = LocalDate.now(), isPago = false),
-            Conta(idConta = 2, usuario = Usuario(idUsuario = 1), etiqueta = "Conta B", valor = 20.0, dataVencimento = LocalDate.now().plusDays(1), isPago = true)
+            Conta(idConta = 1, etiqueta = "Conta A", valor = 10.0, dataVencimento = LocalDate.now(), isPago = false),
+            Conta(idConta = 2, etiqueta = "Conta B", valor = 20.0, dataVencimento = LocalDate.now().plusDays(1), isPago = true)
         )
         `when`(contaService.findAll(any<Sort>())).thenReturn(contasEsperadas)
 
@@ -162,40 +150,10 @@ class ContaControllerTest {
     }
 
     @Test
-    fun `listarContasPorUsuario deve retornar lista de contas do usuario`() {
-        val idUsuario = 1
-        val contasEsperadas = listOf(
-            Conta(idConta = 1, usuario = Usuario(idUsuario = idUsuario), etiqueta = "Conta Usuario A", valor = 30.0, dataVencimento = LocalDate.now()),
-            Conta(idConta = 3, usuario = Usuario(idUsuario = idUsuario), etiqueta = "Conta Usuario C", valor = 40.0, dataVencimento = LocalDate.now())
-        )
-        `when`(contaService.findByUsuarioId(idUsuario)).thenReturn(contasEsperadas)
-
-        val response = controller.listarContasPorUsuario(idUsuario)
-
-        assertEquals(HttpStatus.OK, response.statusCode)
-        assertNotNull(response.body)
-        assertEquals(2, response.body?.size)
-        assertTrue(response.body?.all { it.usuario?.idUsuario == idUsuario } ?: false)
-        verify(contaService).findByUsuarioId(idUsuario)
-    }
-
-    @Test
-    fun `listarContasPorUsuario deve retornar NO CONTENT quando usuario nao tem contas`() {
-        val idUsuario = 1
-        `when`(contaService.findByUsuarioId(idUsuario)).thenReturn(emptyList())
-
-        val response = controller.listarContasPorUsuario(idUsuario)
-
-        assertEquals(HttpStatus.NO_CONTENT, response.statusCode)
-        assertNull(response.body)
-        verify(contaService).findByUsuarioId(idUsuario)
-    }
-
-    @Test
     fun `listarContasPorPago deve retornar lista de contas pagas`() {
         val isPago = true
         val contasEsperadas = listOf(
-            Conta(idConta = 2, usuario = Usuario(idUsuario = 1), etiqueta = "Conta Paga B", valor = 20.0, dataVencimento = LocalDate.now(), isPago = true)
+            Conta(idConta = 2, etiqueta = "Conta Paga B", valor = 20.0, dataVencimento = LocalDate.now(), isPago = true)
         )
         `when`(contaService.findByIsPago(isPago)).thenReturn(contasEsperadas)
 
@@ -226,7 +184,6 @@ class ContaControllerTest {
         val updates = mapOf("etiqueta" to "Etiqueta Atualizada", "isPago" to true)
         val contaAtualizada = Conta(
             idConta = idConta,
-            usuario = Usuario(idUsuario = 1),
             etiqueta = "Etiqueta Atualizada",
             valor = 100.0,
             dataVencimento = LocalDate.now(),
@@ -274,10 +231,8 @@ class ContaControllerTest {
     @Test
     fun `atualizarConta deve atualizar conta com sucesso`() {
         val idConta = 1
-        val usuario = Usuario(idUsuario = 1)
         val contaDTO = ContaDTO(
             idConta = idConta,
-            fkUsuario = 1,
             dataCriacao = LocalDate.now(),
             etiqueta = "Conta Totalmente Atualizada",
             valor = 150.0,
@@ -288,7 +243,6 @@ class ContaControllerTest {
         )
         val contaAtualizadaEsperada = Conta(
             idConta = idConta,
-            usuario = usuario,
             dataCriacao = contaDTO.dataCriacao,
             etiqueta = contaDTO.etiqueta,
             valor = contaDTO.valor,
@@ -299,7 +253,6 @@ class ContaControllerTest {
         )
 
         `when`(contaService.existsById(idConta)).thenReturn(true)
-        `when`(usuarioService.findById(eq(1))).thenReturn(Optional.of(usuario))
         `when`(contaService.save(any())).thenReturn(contaAtualizadaEsperada)
 
         val response = controller.atualizarConta(idConta, contaDTO)
@@ -309,7 +262,6 @@ class ContaControllerTest {
         assertEquals(contaAtualizadaEsperada.idConta, response.body?.idConta)
         assertEquals(contaAtualizadaEsperada.etiqueta, response.body?.etiqueta)
         verify(contaService).existsById(idConta)
-        verify(usuarioService).findById(eq(1))
         verify(contaService).save(any())
     }
 
@@ -318,7 +270,6 @@ class ContaControllerTest {
         val idConta = 1
         val contaDTO = ContaDTO(
             idConta = idConta,
-            fkUsuario = 1,
             dataCriacao = LocalDate.now(),
             etiqueta = "Conta Inexistente",
             valor = 50.0,
@@ -340,10 +291,8 @@ class ContaControllerTest {
     @Test
     fun `atualizarConta deve retornar erro quando servico falha ao salvar`() {
         val idConta = 1
-        val usuario = Usuario(idUsuario = 1)
         val contaDTO = ContaDTO(
             idConta = idConta,
-            fkUsuario = 1,
             dataCriacao = LocalDate.now(),
             etiqueta = "Conta com Erro",
             valor = 10.0,
@@ -354,7 +303,6 @@ class ContaControllerTest {
         )
         val mensagemErro = "Erro ao atualizar conta no serviço"
         `when`(contaService.existsById(idConta)).thenReturn(true)
-        `when`(usuarioService.findById(eq(1))).thenReturn(Optional.of(usuario))
         `when`(contaService.save(any())).thenThrow(ResponseStatusException(HttpStatus.BAD_REQUEST, mensagemErro))
 
         val exception = assertThrows(ResponseStatusException::class.java) {
@@ -363,7 +311,6 @@ class ContaControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST, exception.statusCode)
         assertEquals(mensagemErro, exception.reason)
         verify(contaService).existsById(idConta)
-        verify(usuarioService).findById(eq(1))
         verify(contaService).save(any())
     }
 
