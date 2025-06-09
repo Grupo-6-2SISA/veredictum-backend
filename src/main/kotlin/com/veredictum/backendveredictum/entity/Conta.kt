@@ -13,10 +13,6 @@ data class Conta(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var idConta: Int? = null,
 
-    @ManyToOne
-    @JoinColumn(name = "fk_usuario")
-    var usuario: Usuario? = null,
-
     @Column(name = "data_criacao", updatable = false)
     var dataCriacao: LocalDate = LocalDate.now(),
 
@@ -40,7 +36,6 @@ data class Conta(
 {
     constructor() : this(
         null,
-        Usuario(),
         LocalDate.now(),
         null,
         null,

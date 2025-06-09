@@ -40,6 +40,9 @@ data class Cliente(
     @field:Size( max = 14, message = "O CNPJ deve ter no máximo 14 dígitos")
     var cnpj: String? = null,
 
+    @field:Size(max = 15, message = "O numero de telefone deve ter no máximo 15 caracteres")
+    var telefone: String? = null,
+
     @field:NotNull(message = "A data de nascimento é obrigatória")
     @field:Past(message = "A data de nascimento deve estar no passado")
     var dataNascimento: LocalDate? = null,
@@ -76,6 +79,7 @@ data class Cliente(
             "",
             "",
             null,
+            null,
             LocalDate.now(),
             LocalDate.now(),
             "",
@@ -88,6 +92,7 @@ data class Cliente(
         "",
         "",
         "",
+        null,
         null,
         LocalDate.now(),
         LocalDate.now(),
@@ -110,6 +115,7 @@ data class Cliente(
                 rg = this.rg?:"",
                 cpf = this.cpf?:"",
                 cnpj = this.cnpj?:"",
+                telefone = this.telefone?:"",
                 dataNascimento = this.dataNascimento,
                 dataInicio = this.dataInicio,
                 endereco = this.endereco?:"",

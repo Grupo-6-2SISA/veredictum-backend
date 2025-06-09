@@ -37,6 +37,10 @@ data class LogEnvioLembrete(
     @JoinColumn(name = "fk_atendimento")
     var atendimento: Atendimento,
 
+    @ManyToOne
+    @JoinColumn(name = "fk_cliente")
+    var cliente: Cliente,
+
     @CreationTimestamp
     @Column(name = "data_hora_criacao")
     var dataHoraCriacao: LocalDateTime = LocalDateTime.now(),
@@ -45,6 +49,8 @@ data class LogEnvioLembrete(
     @field:NotBlank(message = "A mensagem do lembrete é obrigatória")
     var mensagem: String = "",
 
+    var funcionou: Boolean = false,
+
     ) {
     constructor() : this(
         null,
@@ -52,6 +58,7 @@ data class LogEnvioLembrete(
         NotaFiscal(),
         Conta(),
         Atendimento(),
+        Cliente(),
         LocalDateTime.now(),
         ""
     )

@@ -37,12 +37,8 @@ class ContaController(
     @PostMapping
     fun criarConta(@RequestBody contaDTO: ContaDTO): ResponseEntity<Conta> {
         try {
-            val usuario = usuarioService.findById(contaDTO.fkUsuario
-                ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário deve ser informado")).orElseThrow {
-                ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário não encontrado")
-            }
+
             val conta = Conta(
-                usuario = usuario,
                 dataCriacao = contaDTO.dataCriacao,
                 etiqueta = contaDTO.etiqueta,
                 valor = contaDTO.valor,
@@ -184,13 +180,9 @@ class ContaController(
             return ResponseEntity.notFound().build()
         }
         try {
-            val usuario = usuarioService.findById(contaDTO.fkUsuario
-                ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário deve ser informado")).orElseThrow {
-                ResponseStatusException(HttpStatus.BAD_REQUEST, "Usuário não encontrado")
-            }
+
             val contaParaSalvar = Conta(
                 idConta = id,
-                usuario = usuario,
                 dataCriacao = contaDTO.dataCriacao,
                 etiqueta = contaDTO.etiqueta,
                 valor = contaDTO.valor,

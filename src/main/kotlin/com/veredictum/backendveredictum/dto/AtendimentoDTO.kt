@@ -22,6 +22,8 @@ data class AtendimentoDTO (
 
     val dataVencimento: LocalDateTime,
 
-    val isPago: Boolean
+    val isPago: Boolean,
+
+    val shouldEnviarEmail: Boolean
 
 )

@@ -10,6 +10,7 @@ data class ClienteDTO (
     val rg: String,
     val cpf: String?,
     val cnpj: String?,
+    val telefone: String?,
     val dataNascimento: LocalDate?,
     val dataInicio: LocalDate?,
     val endereco: String?,

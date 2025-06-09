@@ -18,6 +18,8 @@ data class NotaFiscal(
     @JoinColumn(name = "fk_cliente")
     var cliente: Cliente? = null,
 
+    var numero: String? = null,
+
     @Column(name = "data_criacao", updatable = false)
     var dataCriacao: LocalDate = LocalDate.now(),
 
@@ -40,6 +42,7 @@ data class NotaFiscal(
     constructor() : this(
         null,
         Cliente(),
+        null,
         LocalDate.now(),
         null,
         null,
@@ -54,6 +57,7 @@ data class NotaFiscal(
         return NotaFiscalDTO(
             idNotaFiscal = this.idNotaFiscal,
             fkCliente = this.cliente?.idCliente,
+            numero = this.numero ?: "",
             dataCriacao = this.dataCriacao,
             etiqueta = this.etiqueta ?: "",
             valor = this.valor ?: 0.0,

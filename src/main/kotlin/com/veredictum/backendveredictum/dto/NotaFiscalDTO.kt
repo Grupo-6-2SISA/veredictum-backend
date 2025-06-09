@@ -5,6 +5,7 @@ import java.time.LocalDate
 data class NotaFiscalDTO(
     val idNotaFiscal: Int? = null,
     val fkCliente: Int?,
+    val numero: String? = null,
     val etiqueta: String,
     val valor: Double,
     val dataVencimento: LocalDate,

@@ -44,6 +44,8 @@ data class  Atendimento(
     @field:NotNull(message = "O status de pagamento é obrigatório")
     var isPago: Boolean = false,
 
+    var shouldEnviarEmail: Boolean = false,
+
     ) {
     constructor() : this(
         null,
@@ -69,7 +71,8 @@ data class  Atendimento(
             dataInicio = this.dataInicio,
             dataFim = this.dataFim,
             dataVencimento = this.dataVencimento,
-            isPago = this.isPago
+            isPago = this.isPago,
+            shouldEnviarEmail = this.shouldEnviarEmail,
         )
     }
 }

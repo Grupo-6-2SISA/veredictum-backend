@@ -4,7 +4,6 @@ import java.time.LocalDate
 
 data class ContaDTO(
     val idConta: Int?,
-    val fkUsuario: Int?,
     val dataCriacao: LocalDate,
     val etiqueta: String?,
     val valor: Double?,

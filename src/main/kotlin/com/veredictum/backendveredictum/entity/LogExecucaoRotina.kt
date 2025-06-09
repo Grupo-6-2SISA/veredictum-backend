@@ -24,7 +24,9 @@ data class LogExecucaoRotina(
     @Column(name = "status_execucao")
     var statusExecucao: String? = null,
 
-    var isBloqueado: Boolean = false
+    var isBloqueado: Boolean = false,
+
+    var funcionou: Boolean = false,
 
 )
 
