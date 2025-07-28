@@ -13,7 +13,7 @@ interface ContaRepository : JpaRepository<Conta, Int> {
 
     override fun findAll(sort: Sort): List<Conta>
 
-    @Query("SELECT c FROM Conta c WHERE YEAR(c.dataVencimento) = :ano AND MONTH(c.dataVencimento) = :mes")
+    @Query("SELECT c FROM Conta c WHERE YEAR(c.dataVencimento) = :ano AND MONTH(c.dataVencimento) = :mes ORDER BY c.isPago ASC")
     fun findByAnoAndMes(@Param("ano") ano: Int, @Param("mes") mes: Int): List<Conta>
 
     @Query("SELECT SUM(c.valor) FROM Conta c WHERE YEAR(c.dataVencimento) = :ano AND MONTH(c.dataVencimento) = :mes")

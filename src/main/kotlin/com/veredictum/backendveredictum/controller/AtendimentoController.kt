@@ -3,6 +3,8 @@ package com.veredictum.backendveredictum.controller
 import com.veredictum.backendveredictum.dto.AtendimentoDTO
 import com.veredictum.backendveredictum.entity.Atendimento
 import com.veredictum.backendveredictum.services.AtendimentoService
+import com.veredictum.backendveredictum.services.ClienteService
+import com.veredictum.backendveredictum.services.UsuarioService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/atendimentos")
 class AtendimentoController(
-    private val atendimentoService: AtendimentoService
+    private val atendimentoService: AtendimentoService,
+    private val clienteService: ClienteService,
+    private val usuarioService: UsuarioService
 ) {
 
     @Operation(
@@ -155,9 +159,28 @@ class AtendimentoController(
     )
     @PostMapping()
     fun criarAtendimento(
-        @RequestBody atendimento: Atendimento,
+        @RequestBody atendimentoDTO: AtendimentoDTO,
         @RequestParam statusInicialId: Int
     ): ResponseEntity<AtendimentoDTO> {
+        val cliente = clienteService.findById(atendimentoDTO.fkCliente)
+            .orElseThrow { IllegalArgumentException("Cliente não encontrado com o ID fornecido") }
+
+        val usuario = usuarioService.findById(atendimentoDTO.fkUsuario)
+            .orElseThrow { IllegalArgumentException("Usuário não encontrado com o ID fornecido") }
+
+        val atendimento = Atendimento(
+            idAtendimento = null,
+            cliente = cliente,
+            usuario = usuario,
+            etiqueta = atendimentoDTO.etiqueta,
+            valor = atendimentoDTO.valor,
+            descricao = atendimentoDTO.descricao,
+            dataInicio = atendimentoDTO.dataInicio,
+            dataFim = atendimentoDTO.dataFim,
+            dataVencimento = atendimentoDTO.dataVencimento,
+            isPago = atendimentoDTO.isPago
+        )
+
         val atendimentoCriado = atendimentoService.criarAtendimento(atendimento, statusInicialId)
 
         if (atendimentoCriado == null) {
