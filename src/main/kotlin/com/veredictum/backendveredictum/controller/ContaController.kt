@@ -198,4 +198,66 @@ class ContaController(
         contaService.deleteById(id)
         return ResponseEntity.noContent().build()
     }
+
+    @Operation(
+        summary = "Listar contas por mês e ano",
+        description = "Retorna uma lista de todas as contas cadastradas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Lista de contas retornada com sucesso"),
+            ApiResponse(responseCode = "204", description = "Nenhuma conta encontrada para o mês e ano especificados"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos"),
+            ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        ]
+    )
+    @GetMapping("/por-mes-e-ano")
+    fun listarContasPorMesEAno(
+        @RequestParam mes: Int,
+        @RequestParam ano: Int
+    ): ResponseEntity<List<Conta>> {
+        if (mes !in 1..12) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        if (ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        val contas = contaService.findByMesEAno(mes, ano)
+        return if (contas.isNotEmpty()) {
+            ResponseEntity.ok(contas)
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
+    @Operation(
+        summary = "Obter total do mês",
+        description = "Retorna o somatório do campo valor das contas cadastradas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Total calculado com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos"),
+            ApiResponse(responseCode = "204", description = "Nenhuma conta encontrada para o mês e ano especificados"),
+            ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        ]
+    )
+    @GetMapping("/total-por-mes-e-ano")
+    fun getTotalPorMesEAno(
+        @RequestParam mes: Int,
+        @RequestParam ano: Int
+    ): ResponseEntity<Double> {
+        if (mes !in 1..12) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        if (ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        val total = contaService.getTotalPorMesEAno(mes, ano)
+        return if (total > 0) {
+            ResponseEntity.ok(total)
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
 }

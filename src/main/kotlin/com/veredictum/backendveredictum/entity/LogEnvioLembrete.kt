@@ -1,6 +1,7 @@
 package com.veredictum.backendveredictum.entity
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.veredictum.backendveredictum.dto.LogEnvioLembreteDTO
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
@@ -62,4 +63,17 @@ data class LogEnvioLembrete(
         LocalDateTime.now(),
         ""
     )
+
+    fun toDto(): LogEnvioLembreteDTO {
+        return LogEnvioLembreteDTO(
+            idLogEnvioLembrete = this.idLogEnvioLembrete,
+            fkTipoLembrete = this.tipoLembrete.idTipoLembrete ?: 0,
+            fkNotaFiscal = this.notaFiscal.idNotaFiscal ?: 0,
+            fkConta = this.conta.idConta ?: 0,
+            fkAtendimento = this.atendimento.idAtendimento ?: 0,
+            fkCliente = this.cliente.idCliente,
+            dataHoraCriacao = this.dataHoraCriacao,
+            mensagem = this.mensagem
+        )
+    }
 }

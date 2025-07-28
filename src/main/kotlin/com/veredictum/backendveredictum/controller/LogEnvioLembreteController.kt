@@ -1,5 +1,6 @@
 package com.veredictum.backendveredictum.controller
 
+import com.veredictum.backendveredictum.dto.LogEnvioLembreteDTO
 import com.veredictum.backendveredictum.entity.LogEnvioLembrete
 import com.veredictum.backendveredictum.repository.LogEnvioLembreteRepository
 import io.swagger.v3.oas.annotations.Operation
@@ -26,8 +27,8 @@ class LogEnvioLembreteController(
         ]
     )
     @GetMapping
-    fun buscarTodos(): ResponseEntity<List<LogEnvioLembrete>> {
-        val logs = repository.findAll()
+    fun buscarTodos(): ResponseEntity<List<LogEnvioLembreteDTO>> {
+        val logs = repository.findAll().map { it.toDto() }
         return if (logs.isEmpty()) {
             ResponseEntity.noContent().build()
         } else {
@@ -43,9 +44,9 @@ class LogEnvioLembreteController(
         ]
     )
     @GetMapping("/{id}")
-    fun buscarPorId(@PathVariable id: Int): ResponseEntity<LogEnvioLembrete> {
+    fun buscarPorId(@PathVariable id: Int): ResponseEntity<LogEnvioLembreteDTO> {
         return repository.findById(id)
-            .map { ResponseEntity.ok(it) }
+            .map { ResponseEntity.ok(it.toDto()) }
             .orElse(ResponseEntity.notFound().build())
     }
 
@@ -57,9 +58,9 @@ class LogEnvioLembreteController(
         ]
     )
     @PostMapping
-    fun criar(@RequestBody @Valid novoLog: LogEnvioLembrete): ResponseEntity<LogEnvioLembrete> {
+    fun criar(@RequestBody @Valid novoLog: LogEnvioLembrete): ResponseEntity<LogEnvioLembreteDTO> {
         val logSalvo = repository.save(novoLog)
-        return ResponseEntity.status(HttpStatus.CREATED).body(logSalvo)
+        return ResponseEntity.status(HttpStatus.CREATED).body(logSalvo.toDto())
     }
 
     @Operation(summary = "Atualizar um log de envio de lembrete existente")
@@ -73,11 +74,11 @@ class LogEnvioLembreteController(
     fun atualizar(
         @PathVariable id: Int,
         @RequestBody @Valid logAtualizado: LogEnvioLembrete
-    ): ResponseEntity<LogEnvioLembrete> {
+    ): ResponseEntity<LogEnvioLembreteDTO> {
         return repository.findById(id).map { logExistente ->
             logAtualizado.idLogEnvioLembrete = id
             val logSalvo = repository.save(logAtualizado)
-            ResponseEntity.ok(logSalvo)
+            ResponseEntity.ok(logSalvo.toDto())
         }.orElse(ResponseEntity.notFound().build())
     }
 

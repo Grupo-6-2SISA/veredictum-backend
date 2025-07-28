@@ -96,4 +96,14 @@ class ContaService(
         }
         return contaRepository.save(conta)
     }
+
+    fun findByMesEAno(mes: Int, ano: Int): List<Conta> {
+        return contaRepository.findByAnoAndMes(ano, mes)
+    }
+
+    fun getTotalPorMesEAno(mes: Int, ano: Int): Double {
+        return contaRepository.sumValorByAnoAndMes(ano, mes) ?: 0.0
+    }
+
+
 }
