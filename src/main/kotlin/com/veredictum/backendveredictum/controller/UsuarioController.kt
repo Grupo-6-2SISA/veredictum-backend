@@ -306,7 +306,8 @@ class UsuarioController (
         value = [
             ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso"),
             ApiResponse(responseCode = "404", description = "Administrador associado não encontrado"),
-            ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos")
+            ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            ApiResponse(responseCode = "409", description = "Usuário com o e-mail já cadastrado")
         ]
     )
     @PostMapping("/cadastrar")
@@ -318,11 +319,55 @@ class UsuarioController (
             return ResponseEntity.notFound().build() // 404 Not Found
         }
 
+        val usuarioExistente = repository.findByEmail(novoUsuarioDTO.email)
+        if (usuarioExistente != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build()
+        }
+
         val novoUsuario: Usuario = Usuario(
             nome = novoUsuarioDTO.nome,
             email = novoUsuarioDTO.email,
             senha = novoUsuarioDTO.senha,
             isAtivo = novoUsuarioDTO.isAtivo,
+            isAdm = novoUsuarioDTO.isAdm,
+            administrador = administrador
+        )
+
+        val usuarioSalvo = repository.save(novoUsuario)
+        return ResponseEntity.status(201).body(usuarioSalvo.toDTO()) // 201 Created
+    }
+
+    @Operation(
+        summary = "Cadastrar um novo usuário",
+        description = "Cadastra um novo usuário no sistema. Retorna 201 se o cadastro for bem-sucedido, 400 se houver algum dado inválido ou 404 se o administrador associado não for encontrado."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso"),
+            ApiResponse(responseCode = "404", description = "Administrador associado não encontrado"),
+            ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos"),
+            ApiResponse(responseCode = "409", description = "Usuário com o e-mail já cadastrado")
+        ]
+    )
+    @PostMapping("/cadastrar-inativo")
+    fun cadastrarInativo(@RequestBody @Valid novoUsuarioDTO: CriarUsuarioDTO): ResponseEntity<UsuarioDTO> {
+
+        val administrador = repository.findAdministradorById(novoUsuarioDTO.fkAdm)
+
+        if (administrador == null) {
+            return ResponseEntity.notFound().build() // 404 Not Found
+        }
+
+        val usuarioExistente = repository.findByEmail(novoUsuarioDTO.email)
+        if (usuarioExistente != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build()
+        }
+
+        val novoUsuario: Usuario = Usuario(
+            nome = novoUsuarioDTO.nome,
+            email = novoUsuarioDTO.email,
+            senha = novoUsuarioDTO.senha,
+            isAtivo = false,
             isAdm = novoUsuarioDTO.isAdm,
             administrador = administrador
         )

@@ -15,6 +15,8 @@ interface UsuarioRepository: JpaRepository<Usuario, Int> {
 
     fun findAllByAdministradorNullOrderByIsAtivo(): List<Usuario>
 
+    fun findByEmail(email: String): Usuario?
+
     @Query("SELECT u FROM Usuario u WHERE u.idUsuario = ?1  and u.isAdm = TRUE")
     fun findAdministradorById(id: Int): Usuario?
 

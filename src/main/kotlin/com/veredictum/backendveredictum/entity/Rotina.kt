@@ -3,6 +3,7 @@ package com.veredictum.backendveredictum.entity
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.persistence.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 
 @Entity
@@ -28,6 +29,8 @@ data class Rotina(
 
     @Column(name = "rotina_chamada")
     var rotinaChamada: String = "",
+
+    var dataHoraUltimaExecucao: LocalDateTime? = null,
 
     var isAtivo: Boolean = false
 
