@@ -37,7 +37,6 @@ class ClienteController(
         return if (clientes.isEmpty()) {
             ResponseEntity.noContent().build() // 204 No Content
         } else {
-            // Converte a lista de clientes para DTOs
             ResponseEntity.ok(clientes.map { it.toDTO() }) // 200 OK com lista de clientes
         }
     }
@@ -85,10 +84,15 @@ class ClienteController(
             rg = novoClienteDTO.rg,
             cpf = novoClienteDTO.cpf,
             cnpj = novoClienteDTO.cnpj,
+            telefone = novoClienteDTO.telefone,
             dataNascimento = novoClienteDTO.dataNascimento,
             dataInicio = novoClienteDTO.dataInicio,
-            endereco = novoClienteDTO.endereco,
             cep = novoClienteDTO.cep,
+            logradouro = novoClienteDTO.logradouro,
+            bairro = novoClienteDTO.bairro,
+            localidade = novoClienteDTO.localidade,
+            numero = novoClienteDTO.numero,
+            complemento = novoClienteDTO.complemento,
             descricao = novoClienteDTO.descricao,
             inscricaoEstadual = novoClienteDTO.inscricaoEstadual,
             isProBono = novoClienteDTO.isProBono,
@@ -151,10 +155,15 @@ class ClienteController(
                         "rg" -> cliente.rg = valorStr
                         "cpf" -> cliente.cpf = valorStr
                         "cnpj" -> cliente.cnpj = valorStr
+                        "telefone" -> cliente.telefone = valorStr
                         "dataNascimento" -> cliente.dataNascimento = LocalDate.parse(valorStr)
                         "dataInicio" -> cliente.dataInicio = LocalDate.parse(valorStr)
-                        "endereco" -> cliente.endereco = valorStr
                         "cep" -> cliente.cep = valorStr
+                        "logradouro" -> cliente.logradouro = valorStr
+                        "bairro" -> cliente.bairro = valorStr
+                        "localidade" -> cliente.localidade = valorStr
+                        "numero" -> cliente.numero = valorStr
+                        "complemento" -> cliente.complemento = valorStr
                         "descricao" -> cliente.descricao = valorStr
                         "inscricaoEstadual" -> cliente.inscricaoEstadual = valorStr
                         "proBono" -> cliente.isProBono = valorStr.toBoolean()
@@ -217,4 +226,3 @@ class ClienteController(
         }
     }
 }
-

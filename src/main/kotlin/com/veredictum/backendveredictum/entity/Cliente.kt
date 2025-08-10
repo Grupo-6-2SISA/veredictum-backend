@@ -50,12 +50,19 @@ data class Cliente(
     @field:NotNull(message = "A data de início é obrigatória")
     var dataInicio: LocalDate? = null,
 
-    @field:Size(max = 255, message = "O endereço deve ter no máximo 255 caracteres")
-    var endereco: String? = null,
-
     @field:Size(min = 8, max = 8, message = "O CEP deve ter exatamente 8 dígitos")
     @field:Pattern(regexp = "\\d{8}", message = "O CEP deve conter apenas 8 dígitos numéricos")
     var cep: String? = null,
+
+    var logradouro: String? = null,
+
+    var bairro: String? = null,
+
+    var localidade: String? = null,
+
+    var numero: String? = null,
+
+    var complemento: String? = null,
 
     var descricao: String? = null,
 
@@ -84,9 +91,16 @@ data class Cliente(
             LocalDate.now(),
             "",
             "",
-            null,
-            null,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            false,
+            true,
             false
+
         ),
         "",
         "",
@@ -98,8 +112,13 @@ data class Cliente(
         LocalDate.now(),
         "",
         "",
-        null,
         "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        false,
         true,
         false
     )
@@ -118,8 +137,12 @@ data class Cliente(
                 telefone = this.telefone?:"",
                 dataNascimento = this.dataNascimento,
                 dataInicio = this.dataInicio,
-                endereco = this.endereco?:"",
                 cep = this.cep?:"",
+                logradouro = this.logradouro?:"",
+                bairro = this.bairro?:"",
+                localidade = this.localidade?:"",
+                numero = this.numero?:"",
+                complemento = this.complemento?:"",
                 descricao = this.descricao?:"",
                 inscricaoEstadual = this.inscricaoEstadual?:"",
                 isProBono = this.isProBono,
