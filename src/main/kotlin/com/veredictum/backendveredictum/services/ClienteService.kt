@@ -30,4 +30,9 @@ class ClienteService(
     fun deleteById(id: Int) {
         clienteRepository.deleteById(id)
     }
+
+    fun getClientesAniversariantesDoMes(): List<Cliente> {
+        return clienteRepository.findClientesAniversariantesDoMes()
+    }
+    
 }

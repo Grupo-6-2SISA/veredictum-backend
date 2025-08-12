@@ -42,7 +42,77 @@ VALUES
 
 (DEFAULT, 4, 'Alpha Corp', 'contato@alphacorp.com', NULL, NULL, '55667788000122', '(11)4004-7788',
  '1999-06-06', '2022-01-15', 'Av. Business', 'Centro', 'São Paulo', '700', 'Andar 7', '99887766',
- 'Empresa inativa', '444555666', TRUE, FALSE, TRUE);
+ 'Empresa inativa', '444555666', TRUE, FALSE, TRUE),
+
+-- Clientes aniversariantes 2025 (ago-dez)
+-- Agosto
+(DEFAULT, NULL, 'Bruno Martins', 'bruno.martins@email.com', '2211334455', '32165498700', NULL, '(11)98765-1212',
+    '1987-08-14', '2024-08-01', 'Rua das Acácias', 'Jardim Paulista', 'São Paulo', '350', 'Apto 502', '01415001',
+    'Cliente PF ativo', '110220330', FALSE, TRUE, FALSE),
+
+(DEFAULT, 1, 'InovaTech Ltda', 'contato@inovatech.com', NULL, NULL, '77889966000155', '(11)3010-4455',
+ '1998-08-05', '2023-02-11', 'Rua do Progresso', 'Centro', 'São Paulo', '1200', 'Sala 804', '01310930',
+ 'Cliente PJ pro bono', '550660770', TRUE, TRUE, TRUE),
+
+(DEFAULT, 1, 'Sofia Mendes', 'sofia.mendes@email.com', '4455667788', '15975346820', NULL, '(19)99777-6655',
+ '1990-08-28', '2023-08-20', 'Rua das Oliveiras', 'Cambuí', 'Campinas', '220', 'Apto 304', '13025030',
+ 'PF pro bono inativa com indicador', '221144558', TRUE, FALSE, FALSE),
+
+-- Setembro
+(DEFAULT, 2, 'Paula Souza', 'paula.souza@email.com', '5566778899', '65432198700', NULL, '(21)98811-2233',
+ '1991-09-03', '2024-09-10', 'Rua das Palmeiras', 'Botafogo', 'Rio de Janeiro', '42', 'Casa', '22250900',
+ 'Cliente PF pro bono', '990881122', TRUE, TRUE, FALSE),
+
+(DEFAULT, NULL, 'Global Services SA', 'contato@globalservices.com', NULL, NULL, '88990077000144', '(21)2577-3344',
+ '2001-09-19', '2022-04-20', 'Av. Atlântica', 'Copacabana', 'Rio de Janeiro', '800', 'Andar 10', '22041001',
+ 'Cliente PJ inativo', '220330110', FALSE, FALSE, TRUE),
+
+(DEFAULT, NULL, 'Prime Logística LTDA', 'contato@primelog.com', NULL, NULL, '99887766000133', '(19)3512-4455',
+ '1996-09-07', '2022-09-01', 'Av. das Indústrias', 'Ponte Preta', 'Campinas', '777', 'Galpão 2', '13045670',
+ 'PJ ativo sem indicador', '778899665', FALSE, TRUE, TRUE),
+
+-- Outubro
+(DEFAULT, NULL, 'Renato Alves', 'renato.alves@email.com', '3344556677', '74125896300', NULL, '(31)99123-4567',
+ '1983-10-27', '2021-10-05', 'Rua Minas Gerais', 'Funcionários', 'Belo Horizonte', '75', 'Casa 2', '30130100',
+ 'Cliente PF inativo', '771122334', FALSE, FALSE, FALSE),
+
+(DEFAULT, 3, 'Delta Consultoria ME', 'contato@deltaconsult.com', NULL, NULL, '66778899000122', '(31)3500-7788',
+ '1997-10-12', '2020-07-18', 'Av. Afonso Pena', 'Centro', 'Belo Horizonte', '1020', 'Sala 305', '30130001',
+ 'Cliente PJ pro bono', '119977331', TRUE, TRUE, TRUE),
+
+(DEFAULT, 2, 'Helena Cardoso', 'helena.cardoso@email.com', '2233445566', '35715925840', NULL, '(62)99666-5544',
+ '1989-10-05', '2024-10-02', 'Rua 24 de Outubro', 'Setor Oeste', 'Goiânia', '415', 'Apto 1302', '74125010',
+ 'PF ativa com indicador', '665544332', FALSE, TRUE, FALSE),
+
+-- Novembro
+(DEFAULT, 4, 'Camila Rocha', 'camila.rocha@email.com', '1122446688', '85236974100', NULL, '(41)99988-7766',
+ '1992-11-08', '2024-02-14', 'Rua XV de Novembro', 'Centro', 'Curitiba', '111', 'Apto 901', '80020010',
+ 'Cliente PF ativo com indicador', '998877665', FALSE, TRUE, FALSE),
+
+(DEFAULT, 2, 'Omega Soluções LTDA', 'contato@omegasolucoes.com', NULL, NULL, '33445566000111', '(41)3200-1122',
+ '1999-11-25', '2023-03-03', 'Rua das Flores', 'Batel', 'Curitiba', '456', 'Conj. 12', '80420020',
+ 'Cliente PJ pro bono inativo', '667700559', TRUE, FALSE, TRUE),
+
+(DEFAULT, NULL, 'NeoTech Sistemas EIRELI', 'contato@neotech.com', NULL, NULL, '55660099000188', '(62)3090-7788',
+ '1994-11-17', '2023-11-18', 'Av. T-63', 'Setor Bueno', 'Goiânia', '700', 'Sala 402', '74230010',
+ 'PJ inativa sem indicador', '554433221', FALSE, FALSE, TRUE),
+
+-- Dezembro
+(DEFAULT, NULL, 'Thiago Ribeiro', 'thiago.ribeiro@email.com', '6677889900', '96385274100', NULL, '(51)99800-1122',
+ '1985-12-15', '2022-12-01', 'Rua da Praia', 'Centro', 'Porto Alegre', '88', 'Casa', '90020100',
+ 'Cliente PF pro bono', '445566778', TRUE, TRUE, FALSE),
+
+(DEFAULT, 1, 'Atlas Engenharia Ltda', 'contato@atlasengenharia.com', NULL, NULL, '11220033000177', '(51)4009-7788',
+ '2000-12-02', '2021-05-22', 'Av. Ipiranga', 'Azenha', 'Porto Alegre', '1500', 'Sala 1201', '90160090',
+ 'Cliente PJ ativo', '330022110', FALSE, TRUE, TRUE),
+
+(DEFAULT, 3, 'Mariana Andrade', 'mariana.andrade@email.com', '9988776655', '25896314700', NULL, '(85)99876-5432',
+ '1993-12-29', '2025-01-11', 'Av. Beira Mar', 'Meireles', 'Fortaleza', '1020', 'Apto 701', '60165012',
+ 'PF ativa com indicador', '443322110', FALSE, TRUE, FALSE),
+
+(DEFAULT, 4, 'Quantum Labs LTDA', 'contato@quantumlabs.com', NULL, NULL, '44002233000166', '(85)3456-7890',
+ '1997-12-11', '2020-12-05', 'Rua Desembargador Moreira', 'Aldeota', 'Fortaleza', '1800', 'Conj. 1510', '60170010',
+ 'PJ pro bono ativa com indicador', '221199003', TRUE, TRUE, TRUE);
 
 -- Status de agendamentos (conta, nota e atendimento)
 INSERT INTO status_agendamento (id_status_agendamento, descricao) VALUES
