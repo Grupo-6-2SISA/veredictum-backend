@@ -125,7 +125,18 @@ VALUES
 (DEFAULT,  '2023-10-01', 'Conta Jurídica João', 200.00, '2023-10-15', 'Pagamento referente ao atendimento jurídico.', FALSE, NULL),
 (DEFAULT,  '2023-10-05', 'Conta Consultoria Empresa Y', 600.00, '2023-10-20', 'Pagamento referente à consultoria empresarial.', TRUE, 'comprovante_empresa_y.pdf'),
 (DEFAULT,  '2023-10-10', 'Conta Pro Bono Lucas', 0.00, '2023-10-25', 'Conta referente ao atendimento pro bono.', FALSE, NULL),
-(DEFAULT,  '2023-10-15', 'Conta Suporte Tech Solutions', 400.00, '2023-10-30', 'Pagamento referente ao suporte técnico.', TRUE, 'comprovante_tech_solutions.pdf');
+(DEFAULT, '2025-01-05', 'Conta Janeiro - Serviços Jurídicos', 320.00, '2025-01-20', 'Pagamento de serviços jurídicos de janeiro.', TRUE, 'comprovante_jan_2025.pdf'),
+(DEFAULT, '2025-02-03', 'Conta Fevereiro - Consultoria', 780.50, '2025-02-18', 'Consultoria empresarial.', FALSE, NULL),
+(DEFAULT, '2025-03-12', 'Conta Março - Assessoria Trabalhista', 410.00, '2025-03-25', 'Assessoria trabalhista mensal.', TRUE, 'comprovante_mar_2025.pdf'),
+(DEFAULT, '2025-04-07', 'Conta Abril - Revisão Contratual', 560.00, '2025-04-22', 'Revisão de contratos.', FALSE, NULL),
+(DEFAULT, '2025-05-10', 'Conta Maio - Auditoria', 900.00, '2025-05-27', 'Auditoria de compliance.', TRUE, 'comprovante_maio_2025.pdf'),
+(DEFAULT, '2025-06-01', 'Conta Junho - Parecer Jurídico', 275.00, '2025-06-15', 'Emissão de parecer jurídico.', TRUE, 'comprovante_jun_2025.pdf'),
+(DEFAULT, '2025-07-05', 'Conta Julho - Due Diligence', 1250.00, '2025-07-20', 'Due diligence societária.', FALSE, NULL),
+(DEFAULT, '2025-08-11', 'Conta Agosto - Treinamento LGPD', 650.00, '2025-08-25', 'Treinamento de LGPD para equipe.', TRUE, 'comprovante_agosto_2025.pdf'),
+(DEFAULT, '2025-09-09', 'Conta Setembro - Suporte Contínuo', 300.00, '2025-09-23', 'Suporte jurídico contínuo.', FALSE, NULL),
+(DEFAULT, '2025-10-14', 'Conta Outubro - Mediação', 480.00, '2025-10-28', 'Serviço de mediação.', TRUE, 'comprovante_out_2025.pdf'),
+(DEFAULT, '2025-11-06', 'Conta Novembro - Consultoria Tributária', 830.00, '2025-11-21', 'Consultoria tributária.', FALSE, NULL),
+(DEFAULT, '2025-12-02', 'Conta Dezembro - Encerramento Anual', 1200.00, '2025-12-20', 'Encerramento jurídico anual.', TRUE, 'comprovante_dez_2025.pdf');
 
 INSERT INTO conta (id_conta, data_criacao, etiqueta, valor, data_vencimento, descricao, is_pago, url_nuvem)
 VALUES
@@ -144,11 +155,18 @@ INSERT INTO nota_fiscal (id_nota_fiscal, fk_cliente, data_criacao, etiqueta, val
 
 -- Mais Notas Fiscais (associadas a diferentes clientes)
 INSERT INTO nota_fiscal (id_nota_fiscal, fk_cliente, data_criacao, etiqueta, valor, data_vencimento, descricao, url_nuvem, is_emitida) VALUES
-(DEFAULT, 5, '2023-07-01', 'NF Consulta Maria Oliveira', 275.00, '2023-07-15', 'Nota fiscal da consulta jurídica.', 'nuvem.com/nf_maria.pdf', TRUE),
-(DEFAULT, 6, '2023-08-01', 'NF Projeto Serviços Gerais', 825.00, '2023-08-15', 'Nota fiscal do projeto de consultoria.', 'nuvem.com/nf_servicos.pdf', TRUE),
-(DEFAULT, 7, '2023-09-01', 'NF Assessoria Fernanda Lima', 330.00, '2023-09-15', 'Nota fiscal da assessoria trabalhista.', NULL, FALSE),
-(DEFAULT, 9, '2024-02-01', 'NF Revisão Alpha Corp', 605.00, '2024-02-15', 'Nota fiscal da revisão contratual.', 'nuvem.com/nf_alpha.pdf', TRUE);
-
+                                                                                                                                           (DEFAULT, 5, '2023-07-01', 'NF Consulta Maria Oliveira', 275.00, '2023-07-15', 'Nota fiscal da consulta jurídica.', 'nuvem.com/nf_maria.pdf', TRUE),
+                                                                                                                                           (DEFAULT, 6, '2023-08-01', 'NF Projeto Serviços Gerais', 825.00, '2023-08-15', 'Nota fiscal do projeto de consultoria.', 'nuvem.com/nf_servicos.pdf', TRUE),
+                                                                                                                                           (DEFAULT, 7, '2023-09-01', 'NF Assessoria Fernanda Lima', 330.00, '2023-09-15', 'Nota fiscal da assessoria trabalhista.', NULL, FALSE),
+                                                                                                                                           (DEFAULT, 9, '2024-02-01', 'NF Revisão Alpha Corp', 605.00, '2024-02-15', 'Nota fiscal da revisão contratual.', 'nuvem.com/nf_alpha.pdf', TRUE),
+                                                                                                                                           (DEFAULT, 1, '2026-01-05', 'NF Janeiro João da Silva', 320.00, '2026-01-20', 'Nota fiscal referente a serviços jurídicos de janeiro.', 'nuvem.com/nf_joao_2026_01.pdf', TRUE),
+                                                                                                                                           (DEFAULT, 2, '2026-02-04', 'NF Fevereiro Empresa X', 780.50, '2026-02-18', 'Nota fiscal de consultoria empresarial.', 'nuvem.com/nf_empresax_2026_02.pdf', TRUE),
+                                                                                                                                           (DEFAULT, 3, '2026-03-12', 'NF Março Lucas Pereira', 0.00, '2026-03-25', 'Nota fiscal de atendimento pro bono.', NULL, FALSE),
+                                                                                                                                           (DEFAULT, 4, '2026-04-07', 'NF Abril Tech Solutions', 560.00, '2026-04-22', 'Nota fiscal de revisão contratual.', 'nuvem.com/nf_tech_2026_04.pdf', FALSE),
+                                                                                                                                           (DEFAULT, 5, '2026-05-10', 'NF Maio Maria Oliveira', 650.00, '2026-05-25', 'Nota fiscal de treinamento LGPD.', 'nuvem.com/nf_maria_2026_05.pdf', TRUE),
+                                                                                                                                           (DEFAULT, 6, '2026-06-01', 'NF Junho Serviços Gerais', 275.00, '2026-06-15', 'Nota fiscal de parecer jurídico.', NULL, TRUE),
+                                                                                                                                           (DEFAULT, 7, '2026-07-05', 'NF Julho Fernanda Lima', 1250.00, '2026-07-20', 'Nota fiscal de due diligence societária.', 'nuvem.com/nf_fernanda_2026_07.pdf', FALSE),
+                                                                                                                                           (DEFAULT, 9, '2026-08-11', 'NF Agosto Alpha Corp', 830.00, '2026-08-25', 'Nota fiscal de consultoria tributária.', 'nuvem.com/nf_alpha_2026_08.pdf', TRUE);
 -- Inserts para rotina
 INSERT INTO rotina (id_rotina, nome_rotina, hora_inicio, data_inicio, data_fim, rotina_chamada, is_ativo) VALUES
                                                                                                               (DEFAULT, 'Envio de Feliz Aniversário', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_cliente', TRUE),

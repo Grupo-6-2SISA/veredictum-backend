@@ -3,6 +3,7 @@ package com.veredictum.backendveredictum.services
 import com.veredictum.backendveredictum.entity.Conta
 import com.veredictum.backendveredictum.entity.Usuario
 import com.veredictum.backendveredictum.repository.ContaRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.http.HttpStatus
@@ -105,5 +106,12 @@ class ContaService(
         return contaRepository.sumValorByAnoAndMes(ano, mes) ?: 0.0
     }
 
+    fun getMaisAtrasadas(): List<Conta> {
+        return contaRepository.findMaisAtrasadasAnoAtual(PageRequest.of(0, 10))
+    }
+
+    fun getMaisRecentes(): List<Conta> {
+        return contaRepository.findMaisRecentesAnoAtual(PageRequest.of(0, 10))
+    }
 
 }
