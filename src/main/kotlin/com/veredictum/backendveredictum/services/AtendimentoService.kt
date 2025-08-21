@@ -116,4 +116,8 @@ class AtendimentoService(
         return atendimento.isPresent
     }
 
+    fun getPorMesEAnoOrdenados(ano: Int, mes: Int): List<Atendimento>? {
+        return atendimentoRepository.findByDataInicioYearAndDataInicioMonth(ano, mes)
+    }
+
 }

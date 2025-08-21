@@ -252,4 +252,31 @@ class AtendimentoController(
         }
     }
 
+    @Operation(
+        summary = "Listar atendimentos de um mês/ano, ordenados por data",
+        description = "Recupera os atendimentos do mês e ano informados, ordenados pela data de início (mais recentes primeiro)."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Atendimentos encontrados e ordenados com sucesso"),
+            ApiResponse(responseCode = "204", description = "Nenhum atendimento encontrado para o mês/ano informado")
+        ]
+    )
+    @GetMapping("listar-por-mes-ano/{ano}/{mes}")
+    fun listarPorMesEAnoOrdenados(
+        @PathVariable ano: Int,
+        @PathVariable mes: Int
+    ): ResponseEntity<List<AtendimentoDTO>> {
+        val atendimentos = atendimentoService.getPorMesEAnoOrdenados(ano, mes)
+        if (atendimentos != null) {
+            return if (atendimentos.isEmpty()) {
+                ResponseEntity.noContent().build()
+            } else {
+                ResponseEntity.ok(atendimentos.map { it.toDTO() })
+            }
+        } else {
+            return ResponseEntity.notFound().build()
+        }
+    }
+
 }
