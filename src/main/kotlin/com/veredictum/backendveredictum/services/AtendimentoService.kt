@@ -110,4 +110,10 @@ class AtendimentoService(
         )
         historicoStatusAgendamentoRepository.save(historico)
     }
+
+    fun excluirAtendimento(id: Int): Boolean {
+        val atendimento = atendimentoRepository.findById(id)
+        return atendimento.isPresent
+    }
+
 }

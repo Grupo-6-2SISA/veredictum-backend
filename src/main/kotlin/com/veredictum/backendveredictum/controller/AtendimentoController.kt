@@ -178,7 +178,8 @@ class AtendimentoController(
             dataInicio = atendimentoDTO.dataInicio,
             dataFim = atendimentoDTO.dataFim,
             dataVencimento = atendimentoDTO.dataVencimento,
-            isPago = atendimentoDTO.isPago
+            isPago = atendimentoDTO.isPago,
+            shouldEnviarEmail = atendimentoDTO.shouldEnviarEmail
         )
 
         val atendimentoCriado = atendimentoService.criarAtendimento(atendimento, statusInicialId)
@@ -231,5 +232,24 @@ class AtendimentoController(
         }
     }
 
+    @Operation(
+        summary = "Excluir atendimento",
+        description = "Remove um atendimento específico do sistema."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Atendimento excluído com sucesso"),
+            ApiResponse(responseCode = "404", description = "Atendimento não encontrado")
+        ]
+    )
+    @DeleteMapping("/{id}")
+    fun excluirAtendimento(@PathVariable id: Int): ResponseEntity<Void> {
+        val sucesso = atendimentoService.excluirAtendimento(id)
+        return if (sucesso) {
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.notFound().build()
+        }
+    }
 
 }
