@@ -166,8 +166,8 @@ class NotaFiscalController(
 
 
     @Operation(
-        summary = "Obter as 10 notas fiscais mais atrasadas não emitidas do ano atual",
-        description = "Retorna as 10 notas fiscais não emitidas com data de vencimento mais antiga no ano atual, ordenadas do mais atrasado para o menos atrasado."
+        summary = "Obter as top x notas fiscais mais atrasadas não emitidas do ano atual",
+        description = "Retorna as top x notas fiscais não emitidas com data de vencimento mais antiga no ano atual, ordenadas do mais atrasado para o menos atrasado."
     )
     @ApiResponses(
         value = [
@@ -176,9 +176,9 @@ class NotaFiscalController(
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
-    @GetMapping("/mais-atrasadas")
-    fun getMaisAtrasadas(): ResponseEntity<List<NotaFiscal>> {
-        val notas = notaFiscalService.getMaisAtrasadas()
+    @GetMapping("/mais-atrasadas/{top}")
+    fun getMaisAtrasadas(@PathVariable top: Int?): ResponseEntity<List<NotaFiscal>> {
+        val notas = notaFiscalService.getMaisAtrasadas(top)
         return if (notas.isNotEmpty()) {
             ResponseEntity.ok(notas)
         } else {
@@ -187,8 +187,8 @@ class NotaFiscalController(
     }
 
     @Operation(
-        summary = "Obter as 10 notas fiscais mais recentes do ano atual",
-        description = "Retorna as 10 notas fiscais com data de vencimento mais recente no ano atual, ordenadas da mais nova para a mais antiga."
+        summary = "Obter as top x notas fiscais mais recentes do ano atual",
+        description = "Retorna as top x notas fiscais com data de vencimento mais recente no ano atual, ordenadas da mais nova para a mais antiga."
     )
     @ApiResponses(
         value = [
@@ -197,9 +197,9 @@ class NotaFiscalController(
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
-    @GetMapping("/mais-recentes")
-    fun getMaisRecentes(): ResponseEntity<List<NotaFiscal>> {
-        val notas = notaFiscalService.getMaisRecentes()
+    @GetMapping("/mais-recentes/{top}")
+    fun getMaisRecentes(@PathVariable top: Int?): ResponseEntity<List<NotaFiscal>> {
+        val notas = notaFiscalService.getMaisRecentes(top)
         return if (notas.isNotEmpty()) {
             ResponseEntity.ok(notas)
         } else {

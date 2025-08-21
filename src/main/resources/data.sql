@@ -236,7 +236,20 @@ INSERT INTO nota_fiscal (id_nota_fiscal, fk_cliente, data_criacao, etiqueta, val
                                                                                                                                            (DEFAULT, 5, '2026-05-10', 'NF Maio Maria Oliveira', 650.00, '2026-05-25', 'Nota fiscal de treinamento LGPD.', 'nuvem.com/nf_maria_2026_05.pdf', TRUE),
                                                                                                                                            (DEFAULT, 6, '2026-06-01', 'NF Junho Serviços Gerais', 275.00, '2026-06-15', 'Nota fiscal de parecer jurídico.', NULL, TRUE),
                                                                                                                                            (DEFAULT, 7, '2026-07-05', 'NF Julho Fernanda Lima', 1250.00, '2026-07-20', 'Nota fiscal de due diligence societária.', 'nuvem.com/nf_fernanda_2026_07.pdf', FALSE),
-                                                                                                                                           (DEFAULT, 9, '2026-08-11', 'NF Agosto Alpha Corp', 830.00, '2026-08-25', 'Nota fiscal de consultoria tributária.', 'nuvem.com/nf_alpha_2026_08.pdf', TRUE);
+                                                                                                                                           (DEFAULT, 9, '2026-08-11', 'NF Agosto Alpha Corp', 830.00, '2026-08-25', 'Nota fiscal de consultoria tributária.', 'nuvem.com/nf_alpha_2026_08.pdf', TRUE),
+                                                                                                                                           (DEFAULT, 10, '2025-01-08', 'NF Janeiro Bruno Martins', 210.00, '2025-01-22', 'Nota fiscal de consulta jurídica.', 'nuvem.com/nf_bruno_2025_01.pdf', TRUE),
+(DEFAULT, 11, '2025-02-12', 'NF Fevereiro InovaTech', 780.50, '2025-02-26', 'Nota fiscal de consultoria empresarial.', 'nuvem.com/nf_inovatech_2025_02.pdf', TRUE),
+(DEFAULT, 12, '2025-03-05', 'NF Março Sofia Mendes', 0.00, '2025-03-19', 'Nota fiscal de atendimento pro bono.', NULL, FALSE),
+(DEFAULT, 13, '2025-04-09', 'NF Abril Paula Souza', 320.00, '2025-04-23', 'Nota fiscal de serviços jurídicos.', 'nuvem.com/nf_paula_2025_04.pdf', TRUE),
+(DEFAULT, 14, '2025-05-14', 'NF Maio Global Services', 650.00, '2025-05-28', 'Nota fiscal de treinamento LGPD.', 'nuvem.com/nf_global_2025_05.pdf', TRUE),
+(DEFAULT, 15, '2025-06-03', 'NF Junho Prime Logística', 275.00, '2025-06-17', 'Nota fiscal de parecer jurídico.', 'nuvem.com/nf_prime_2025_06.pdf', TRUE),
+(DEFAULT, 16, '2025-07-07', 'NF Julho Renato Alves', 1250.00, '2025-07-21', 'Nota fiscal de due diligence societária.', 'nuvem.com/nf_renato_2025_07.pdf', FALSE),
+(DEFAULT, 17, '2025-08-11', 'NF Agosto Delta Consultoria', 480.00, '2025-08-25', 'Nota fiscal de mediação.', 'nuvem.com/nf_delta_2025_08.pdf', TRUE),
+(DEFAULT, 18, '2025-09-04', 'NF Setembro Helena Cardoso', 300.00, '2025-09-18', 'Nota fiscal de suporte jurídico contínuo.', NULL, FALSE),
+(DEFAULT, 19, '2025-10-15', 'NF Outubro Camila Rocha', 410.00, '2025-10-29', 'Nota fiscal de assessoria trabalhista.', 'nuvem.com/nf_camila_2025_10.pdf', TRUE),
+(DEFAULT, 20, '2025-11-06', 'NF Novembro Omega Soluções', 830.00, '2025-11-21', 'Nota fiscal de consultoria tributária.', 'nuvem.com/nf_omega_2025_11.pdf', TRUE),
+(DEFAULT, 21, '2025-12-02', 'NF Dezembro NeoTech Sistemas', 1200.00, '2025-12-20', 'Nota fiscal de encerramento anual.', 'nuvem.com/nf_neotech_2025_12.pdf', TRUE);
+
 -- Inserts para rotina
 INSERT INTO rotina (id_rotina, nome_rotina, hora_inicio, data_inicio, data_fim, rotina_chamada, is_ativo) VALUES
                                                                                                               (DEFAULT, 'Envio de Feliz Aniversário', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_cliente', TRUE),

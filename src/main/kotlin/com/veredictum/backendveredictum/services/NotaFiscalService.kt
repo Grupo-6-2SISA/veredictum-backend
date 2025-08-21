@@ -32,11 +32,11 @@ class NotaFiscalService(
         notaFiscalRepository.deleteById(id)
     }
 
-    fun getMaisAtrasadas(): List<NotaFiscal> {
-        return notaFiscalRepository.findMaisAtrasadasAnoAtual(PageRequest.of(0, 10))
+    fun getMaisAtrasadas(pageSize: Int?): List<NotaFiscal> {
+        return notaFiscalRepository.findMaisAtrasadasAnoAtual(PageRequest.of(0, pageSize ?: 10))
     }
 
-    fun getMaisRecentes(): List<NotaFiscal> {
-        return notaFiscalRepository.findMaisRecentesAnoAtual(PageRequest.of(0, 10))
+    fun getMaisRecentes(pageSize: Int?): List<NotaFiscal> {
+        return notaFiscalRepository.findMaisRecentesAnoAtual(PageRequest.of(0, pageSize ?: 10))
     }
 }

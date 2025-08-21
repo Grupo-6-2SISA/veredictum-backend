@@ -262,8 +262,8 @@ class ContaController(
     }
 
     @Operation(
-        summary = "Obter as 10 contas mais atrasadas não pagas do ano atual",
-        description = "Retorna as 10 contas não pagas com data de vencimento mais antiga no ano atual, ordenadas do mais atrasado para o menos atrasado."
+        summary = "Obter as top x contas mais atrasadas não pagas do ano atual",
+        description = "Retorna as top x contas não pagas com data de vencimento mais antiga no ano atual, ordenadas do mais atrasado para o menos atrasado."
     )
     @ApiResponses(
         value = [
@@ -272,9 +272,9 @@ class ContaController(
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
-    @GetMapping("/mais-atrasadas")
-    fun getMaisAtrasadas(): ResponseEntity<List<Conta>> {
-        val contas = contaService.getMaisAtrasadas()
+    @GetMapping("/mais-atrasadas/{top}")
+    fun getMaisAtrasadas(@PathVariable top: Int?): ResponseEntity<List<Conta>> {
+        val contas = contaService.getMaisAtrasadas(top)
         return if (contas.isNotEmpty()) {
             ResponseEntity.ok(contas)
         } else {
@@ -283,8 +283,8 @@ class ContaController(
     }
 
     @Operation(
-        summary = "Obter as 10 contas mais recentes do ano atual",
-        description = "Retorna as 10 contas com data de vencimento mais recente no ano atual, ordenadas da mais nova para a mais antiga."
+        summary = "Obter as top x contas mais recentes do ano atual",
+        description = "Retorna as top x contas com data de vencimento mais recente no ano atual, ordenadas da mais nova para a mais antiga."
     )
     @ApiResponses(
         value = [
@@ -293,9 +293,9 @@ class ContaController(
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
-    @GetMapping("/mais-recentes")
-    fun getMaisRecentes(): ResponseEntity<List<Conta>> {
-        val contas = contaService.getMaisRecentes()
+    @GetMapping("/mais-recentes/{top}")
+    fun getMaisRecentes(@PathVariable top: Int?): ResponseEntity<List<Conta>> {
+        val contas = contaService.getMaisRecentes(top)
         return if (contas.isNotEmpty()) {
             ResponseEntity.ok(contas)
         } else {

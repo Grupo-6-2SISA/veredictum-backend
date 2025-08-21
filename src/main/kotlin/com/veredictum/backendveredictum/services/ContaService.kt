@@ -106,12 +106,12 @@ class ContaService(
         return contaRepository.sumValorByAnoAndMes(ano, mes) ?: 0.0
     }
 
-    fun getMaisAtrasadas(): List<Conta> {
-        return contaRepository.findMaisAtrasadasAnoAtual(PageRequest.of(0, 10))
+    fun getMaisAtrasadas(pageSize: Int?): List<Conta> {
+        return contaRepository.findMaisAtrasadasAnoAtual(PageRequest.of(0, pageSize?: 10))
     }
 
-    fun getMaisRecentes(): List<Conta> {
-        return contaRepository.findMaisRecentesAnoAtual(PageRequest.of(0, 10))
+    fun getMaisRecentes(pageSize: Int?): List<Conta> {
+        return contaRepository.findMaisRecentesAnoAtual(PageRequest.of(0, pageSize?: 10))
     }
 
 }
