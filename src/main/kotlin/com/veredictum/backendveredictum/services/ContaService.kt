@@ -1,22 +1,26 @@
 package com.veredictum.backendveredictum.services
 
-import com.veredictum.backendveredictum.entity.Conta
-import com.veredictum.backendveredictum.entity.Usuario
+import com.veredictum.backendveredictum.entity.*
 import com.veredictum.backendveredictum.repository.ContaRepository
+import com.veredictum.backendveredictum.repository.HistoricoStatusAgendamentoRepository
+import com.veredictum.backendveredictum.repository.StatusAgendamentoRepository
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
 class ContaService(
     private val contaRepository: ContaRepository,
+    private val statusAgendamentoRepository: StatusAgendamentoRepository,
+    private val historicoStatusAgendamentoRepository: HistoricoStatusAgendamentoRepository
 ) {
 
 
-    fun save(conta: Conta): Conta {
+    fun save(conta: Conta, statusInicialId: Int): Conta {
 
 
         val contaToSave: Conta
@@ -45,6 +49,8 @@ class ContaService(
                 isPago = conta.isPago
             )
         }
+        val statusInicial = statusAgendamentoRepository.findById(statusInicialId).orElse(null)
+        registrarHistorico(contaToSave, statusInicial)
         return contaRepository.save(contaToSave)
     }
 
@@ -105,5 +111,30 @@ class ContaService(
         return contaRepository.sumValorByAnoAndMes(ano, mes) ?: 0.0
     }
 
+    fun editarConta(id: Int, contaEditada: Conta): Conta? {
+        val contaExistente = contaRepository.findById(id).orElse(null) ?: return null
+
+        contaExistente.dataCriacao = contaEditada.dataCriacao
+        contaExistente.etiqueta = contaEditada.etiqueta
+        contaExistente.valor = contaEditada.valor
+        contaExistente.dataVencimento = contaEditada.dataVencimento
+        contaExistente.urlNuvem = contaEditada.urlNuvem
+        contaExistente.descricao = contaEditada.descricao
+        contaExistente.isPago = contaEditada.isPago
+
+        return contaRepository.save(contaExistente)
+    }
+
+    private fun registrarHistorico(conta: Conta, statusAgendamento: StatusAgendamento) {
+
+        val historico = HistoricoStatusAgendamento(
+            atendimento = null,
+            nota = null,
+            conta = conta,
+            statusAgendamento = statusAgendamento,
+            dataHoraAlteracao = LocalDateTime.now()
+        )
+        historicoStatusAgendamentoRepository.save(historico)
+    }
 
 }

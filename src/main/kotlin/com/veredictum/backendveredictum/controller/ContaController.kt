@@ -35,7 +35,7 @@ class ContaController(
         ]
     )
     @PostMapping
-    fun criarConta(@RequestBody contaDTO: ContaDTO): ResponseEntity<Conta> {
+    fun criarConta(@RequestBody contaDTO: ContaDTO, @RequestParam statusInicialId: Int): ResponseEntity<Conta> {
         try {
 
             val conta = Conta(
@@ -47,7 +47,7 @@ class ContaController(
                 descricao = contaDTO.descricao,
                 isPago = contaDTO.isPago
             )
-            val contaSalva = contaService.save(conta)
+            val contaSalva = contaService.save(conta, statusInicialId)
             return ResponseEntity.status(HttpStatus.CREATED).body(contaSalva)
         } catch (e: ResponseStatusException) {
             throw e
@@ -170,7 +170,7 @@ class ContaController(
                 descricao = contaDTO.descricao,
                 isPago = contaDTO.isPago
             )
-            val contaSalva = contaService.save(contaParaSalvar)
+            val contaSalva = contaService.editarConta(id, contaParaSalvar)
             return ResponseEntity.ok(contaSalva)
         } catch (e: ResponseStatusException) {
             throw e
