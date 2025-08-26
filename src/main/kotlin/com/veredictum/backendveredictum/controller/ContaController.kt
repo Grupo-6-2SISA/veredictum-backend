@@ -47,7 +47,7 @@ class ContaController(
                 descricao = contaDTO.descricao,
                 isPago = contaDTO.isPago
             )
-            val contaSalva = contaService.save(conta, statusInicialId)
+            val contaSalva = contaService.criarConta(conta, statusInicialId)
             return ResponseEntity.status(HttpStatus.CREATED).body(contaSalva)
         } catch (e: ResponseStatusException) {
             throw e
