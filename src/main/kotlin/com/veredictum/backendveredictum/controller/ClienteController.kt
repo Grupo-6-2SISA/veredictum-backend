@@ -3,6 +3,7 @@ package com.veredictum.backendveredictum.controller
 import com.veredictum.backendveredictum.entity.Cliente
 import com.veredictum.backendveredictum.repository.ClienteRepository
 import com.veredictum.backendveredictum.dto.ClienteDTO
+import com.veredictum.backendveredictum.services.ClienteService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
@@ -18,7 +19,8 @@ import java.time.LocalDate
 @RestController
 @RequestMapping("/clientes")
 class ClienteController(
-    val repository: ClienteRepository
+    val repository: ClienteRepository,
+    val clienteService: ClienteService
 ) {
 
     @Operation(
@@ -225,4 +227,27 @@ class ClienteController(
             ResponseEntity.status(404).build()
         }
     }
+
+
+    @Operation(
+        summary = "Obter clientes que fazem aniversário no mês atual",
+        description = "Retorna a lista de clientes aniversariantes do mês atual, ordenados pelo dia do mês."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso"),
+            ApiResponse(responseCode = "204", description = "Nenhum cliente aniversariante encontrado no mês atual"),
+            ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        ]
+    )
+    @GetMapping("/aniversariantes-do-mes")
+    fun getClientesAniversariantesDoMes(): ResponseEntity<List<Cliente>> {
+        val clientes = clienteService.getClientesAniversariantesDoMes()
+        return if (clientes.isNotEmpty()) {
+            ResponseEntity.ok(clientes)
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
 }

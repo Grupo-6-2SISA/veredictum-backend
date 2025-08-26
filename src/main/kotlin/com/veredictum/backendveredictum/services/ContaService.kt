@@ -2,8 +2,12 @@ package com.veredictum.backendveredictum.services
 
 import com.veredictum.backendveredictum.entity.*
 import com.veredictum.backendveredictum.repository.ContaRepository
+<<<<<<< HEAD
 import com.veredictum.backendveredictum.repository.HistoricoStatusAgendamentoRepository
 import com.veredictum.backendveredictum.repository.StatusAgendamentoRepository
+=======
+import org.springframework.data.domain.PageRequest
+>>>>>>> 3ca709620d3eebf26241a80dd51163502ba9953b
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import org.springframework.http.HttpStatus
@@ -111,6 +115,7 @@ class ContaService(
         return contaRepository.sumValorByAnoAndMes(ano, mes) ?: 0.0
     }
 
+<<<<<<< HEAD
     fun editarConta(id: Int, contaEditada: Conta): Conta? {
         val contaExistente = contaRepository.findById(id).orElse(null) ?: return null
 
@@ -135,6 +140,14 @@ class ContaService(
             dataHoraAlteracao = LocalDateTime.now()
         )
         historicoStatusAgendamentoRepository.save(historico)
+=======
+    fun getMaisAtrasadas(pageSize: Int?): List<Conta> {
+        return contaRepository.findMaisAtrasadasAnoAtual(PageRequest.of(0, pageSize?: 10))
+    }
+
+    fun getMaisRecentes(pageSize: Int?): List<Conta> {
+        return contaRepository.findMaisRecentesAnoAtual(PageRequest.of(0, pageSize?: 10))
+>>>>>>> 3ca709620d3eebf26241a80dd51163502ba9953b
     }
 
 }

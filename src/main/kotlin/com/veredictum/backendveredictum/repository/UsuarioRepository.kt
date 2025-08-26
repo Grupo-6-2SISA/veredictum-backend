@@ -20,4 +20,7 @@ interface UsuarioRepository: JpaRepository<Usuario, Int> {
     @Query("SELECT u FROM Usuario u WHERE u.idUsuario = ?1  and u.isAdm = TRUE")
     fun findAdministradorById(id: Int): Usuario?
 
+    @Query("SELECT u FROM Usuario u WHERE u.idUsuario = ?1 AND u.email = ?2")
+    fun findByIdAndEmail(id: Int, email: String): Usuario?
+
 }

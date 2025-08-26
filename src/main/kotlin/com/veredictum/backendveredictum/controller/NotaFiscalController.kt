@@ -163,4 +163,47 @@ class NotaFiscalController(
             ResponseEntity.notFound().build()
         }
     }
+
+
+    @Operation(
+        summary = "Obter as top x notas fiscais mais atrasadas não emitidas do ano atual",
+        description = "Retorna as top x notas fiscais não emitidas com data de vencimento mais antiga no ano atual, ordenadas do mais atrasado para o menos atrasado."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Lista de notas fiscais atrasadas retornada com sucesso"),
+            ApiResponse(responseCode = "204", description = "Nenhuma nota fiscal atrasada encontrada para o ano atual"),
+            ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        ]
+    )
+    @GetMapping("/mais-atrasadas/{top}")
+    fun getMaisAtrasadas(@PathVariable top: Int?): ResponseEntity<List<NotaFiscal>> {
+        val notas = notaFiscalService.getMaisAtrasadas(top)
+        return if (notas.isNotEmpty()) {
+            ResponseEntity.ok(notas)
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
+    @Operation(
+        summary = "Obter as top x notas fiscais mais recentes do ano atual",
+        description = "Retorna as top x notas fiscais com data de vencimento mais recente no ano atual, ordenadas da mais nova para a mais antiga."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Lista de notas fiscais recentes retornada com sucesso"),
+            ApiResponse(responseCode = "204", description = "Nenhuma nota fiscal recente encontrada para o ano atual"),
+            ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        ]
+    )
+    @GetMapping("/mais-recentes/{top}")
+    fun getMaisRecentes(@PathVariable top: Int?): ResponseEntity<List<NotaFiscal>> {
+        val notas = notaFiscalService.getMaisRecentes(top)
+        return if (notas.isNotEmpty()) {
+            ResponseEntity.ok(notas)
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
 }

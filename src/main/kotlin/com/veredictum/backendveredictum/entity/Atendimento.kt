@@ -23,8 +23,6 @@ data class  Atendimento(
     @JoinColumn(name = "fk_usuario")
     var usuario: Usuario,
 
-    @field:NotBlank(message = "A etiqueta é obrigatória")
-    @field:Size(max = 30, message = "A etiqueta não pode ter mais que 30 caracteres")
     var etiqueta: String,
 
     @field:NotNull(message = "O valor é obrigatório")

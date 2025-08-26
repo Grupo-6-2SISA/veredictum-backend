@@ -260,4 +260,47 @@ class ContaController(
             ResponseEntity.noContent().build()
         }
     }
+
+    @Operation(
+        summary = "Obter as top x contas mais atrasadas não pagas do ano atual",
+        description = "Retorna as top x contas não pagas com data de vencimento mais antiga no ano atual, ordenadas do mais atrasado para o menos atrasado."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Lista de contas atrasadas retornada com sucesso"),
+            ApiResponse(responseCode = "204", description = "Nenhuma conta atrasada encontrada para o ano atual"),
+            ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        ]
+    )
+    @GetMapping("/mais-atrasadas/{top}")
+    fun getMaisAtrasadas(@PathVariable top: Int?): ResponseEntity<List<Conta>> {
+        val contas = contaService.getMaisAtrasadas(top)
+        return if (contas.isNotEmpty()) {
+            ResponseEntity.ok(contas)
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
+    @Operation(
+        summary = "Obter as top x contas mais recentes do ano atual",
+        description = "Retorna as top x contas com data de vencimento mais recente no ano atual, ordenadas da mais nova para a mais antiga."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Lista de contas recentes retornada com sucesso"),
+            ApiResponse(responseCode = "204", description = "Nenhuma conta recente encontrada para o ano atual"),
+            ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        ]
+    )
+    @GetMapping("/mais-recentes/{top}")
+    fun getMaisRecentes(@PathVariable top: Int?): ResponseEntity<List<Conta>> {
+        val contas = contaService.getMaisRecentes(top)
+        return if (contas.isNotEmpty()) {
+            ResponseEntity.ok(contas)
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
 }

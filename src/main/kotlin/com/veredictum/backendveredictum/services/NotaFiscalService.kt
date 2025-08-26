@@ -2,6 +2,7 @@ package com.veredictum.backendveredictum.services
 
 import com.veredictum.backendveredictum.entity.NotaFiscal
 import com.veredictum.backendveredictum.repository.NotaFiscalRepository
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.util.Optional
 
@@ -29,5 +30,13 @@ class NotaFiscalService(
 
     fun deleteById(id: Int) {
         notaFiscalRepository.deleteById(id)
+    }
+
+    fun getMaisAtrasadas(pageSize: Int?): List<NotaFiscal> {
+        return notaFiscalRepository.findMaisAtrasadasAnoAtual(PageRequest.of(0, pageSize ?: 10))
+    }
+
+    fun getMaisRecentes(pageSize: Int?): List<NotaFiscal> {
+        return notaFiscalRepository.findMaisRecentesAnoAtual(PageRequest.of(0, pageSize ?: 10))
     }
 }

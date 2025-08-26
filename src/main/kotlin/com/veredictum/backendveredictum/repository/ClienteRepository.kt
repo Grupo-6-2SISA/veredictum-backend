@@ -9,5 +9,11 @@ interface ClienteRepository : JpaRepository<Cliente, Int> {
     @Query("SELECT c FROM Cliente c ORDER BY c.isAtivo DESC")
     fun findAllOrderByIsAtivo(): List<Cliente>
 
+    @Query(
+        "SELECT c FROM Cliente c " +
+                "WHERE FUNCTION('MONTH', c.dataNascimento) = FUNCTION('MONTH', CURRENT_DATE) " +
+                "ORDER BY FUNCTION('DAY', c.dataNascimento) ASC"
+    )
+    fun findClientesAniversariantesDoMes(): List<Cliente>
 
 }

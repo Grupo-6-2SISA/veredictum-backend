@@ -276,17 +276,17 @@ class UsuarioController (
             ApiResponse(responseCode = "404", description = "Usuário não encontrado")
         ]
     )
-    @PatchMapping("/alterar-senha/{id}")
+    @PatchMapping("/alterar-senha/{id}/{email}")
     fun alterarSenha(
         @PathVariable id: Int,
+        @PathVariable email: String,
         @RequestBody senha: Map<String, String>
     ): ResponseEntity<Void> {
-        val usuarioOptional = repository.findById(id)
-        if (usuarioOptional.isEmpty) {
-            return ResponseEntity.notFound().build() // 404 Not Found
+        val usuario = repository.findByIdAndEmail(id, email)
+        if (usuario == null) {
+            return ResponseEntity.notFound().build()
         }
 
-        val usuario = usuarioOptional.get()
         val novaSenha = senha["senha"]
 
         return if (novaSenha != null && novaSenha.isNotBlank() && novaSenha.length >= 6) {

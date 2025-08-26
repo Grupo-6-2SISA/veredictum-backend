@@ -110,4 +110,14 @@ class AtendimentoService(
         )
         historicoStatusAgendamentoRepository.save(historico)
     }
+
+    fun excluirAtendimento(id: Int): Boolean {
+        val atendimento = atendimentoRepository.findById(id)
+        return atendimento.isPresent
+    }
+
+    fun getPorMesEAnoOrdenados(ano: Int, mes: Int): List<Atendimento>? {
+        return atendimentoRepository.findByDataInicioYearAndDataInicioMonth(ano, mes)
+    }
+
 }
