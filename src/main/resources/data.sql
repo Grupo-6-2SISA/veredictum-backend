@@ -52,10 +52,7 @@ VALUES
 
 (DEFAULT, 1, 'InovaTech Ltda', 'contato@inovatech.com', NULL, NULL, '77889966000155', '(11)3010-4455',
  '1998-08-05', '2023-02-11', 'Rua do Progresso', 'Centro', 'São Paulo', '1200', 'Sala 804', '01310930',
- 'Cliente PJ pro bono', '550660770', TRUE, TRUE, TRUE),
-
-(DEFAULT, 1, 'Sofia Mendes', 'sofia.mendes@email.com', '4455667788', '15975346820', NULL, '(19)99777-6655',
- '1990-08-28', '2023-08-20', 'Rua das Oliveiras', 'Cambuí', 'Campinas', '220', 'Apto 304', '13025030',
+ 'Cliente PJ pro bono', '550660770', TRr'Rua das Oliveiras', 'Cambuí', 'Campinas', '220', 'Apto 304', '13025030',
  'PF pro bono inativa com indicador', '221144558', TRUE, FALSE, FALSE),
 
 -- Setembro
@@ -252,8 +249,10 @@ INSERT INTO nota_fiscal (id_nota_fiscal, fk_cliente, data_criacao, etiqueta, val
 
 -- Inserts para rotina
 INSERT INTO rotina (id_rotina, nome_rotina, hora_inicio, data_inicio, data_fim, rotina_chamada, is_ativo) VALUES
-                                                                                                              (DEFAULT, 'Envio de Feliz Aniversário', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_cliente', TRUE),
-                                                                                                              (DEFAULT, 'Envio de Lembrete de Aniversário o Funcionario', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_funcionario', TRUE),
-                                                                                                              (DEFAULT, 'Envio de Lembrete de Atendimento para o Cliente', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'atendimento_cliente', TRUE),
-                                                                                                              (DEFAULT, 'Envio de Lembrete de Atendimento para o Funcionario', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'atendimento_funcionario', TRUE),
-                                                                                                              (DEFAULT, 'Envio de Lembrete de Contas e Notas para o Funcionario', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'verifica_agendamento', TRUE);
+                                                                                                              (DEFAULT, 'Aniversário (Cliente)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_cliente', TRUE),
+                                                                                                              (DEFAULT, 'Aniversário (Funcionário)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_funcionario', TRUE),
+                                                                                                              (DEFAULT, 'Atendimento (Cliente)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'atendimento_cliente', TRUE),
+                                                                                                              (DEFAULT, 'Atendimento (Funcionario)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'atendimento_funcionario', TRUE),
+                                                                                                              (DEFAULT, 'Notas (Funcionario)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'verifica_nota', TRUE),
+                                                                                                              (DEFAULT, 'Contas (Funcionario)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'verifica_conta', TRUE);
+

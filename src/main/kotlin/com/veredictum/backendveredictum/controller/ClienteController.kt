@@ -71,7 +71,7 @@ class ClienteController(
             ApiResponse(responseCode = "500", description = "Erro interno do servidor")
         ]
     )
-    @PostMapping("/cadastrar-inativo")
+    @PostMapping
     fun cadastrarInativo(@RequestBody @Valid novoClienteDTO: ClienteDTO): ResponseEntity<ClienteDTO> {
         val indicador = novoClienteDTO.fkIndicador?.let { id ->
             repository.findById(id).orElseThrow {
@@ -98,7 +98,7 @@ class ClienteController(
             descricao = novoClienteDTO.descricao,
             inscricaoEstadual = novoClienteDTO.inscricaoEstadual,
             isProBono = novoClienteDTO.isProBono,
-            isAtivo = false, // Valor padrão
+            isAtivo = true, // Clientes são criados como ativos por padrão
             isJuridico = novoClienteDTO.isJuridico,
         )
 
