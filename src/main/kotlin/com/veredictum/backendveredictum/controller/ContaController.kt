@@ -1,5 +1,6 @@
 package com.veredictum.backendveredictum.controller
 
+import com.veredictum.backendveredictum.dto.AtendimentoDTO
 import com.veredictum.backendveredictum.dto.ContaDTO
 import com.veredictum.backendveredictum.entity.Conta
 import com.veredictum.backendveredictum.services.ContaService
@@ -300,6 +301,47 @@ class ContaController(
             ResponseEntity.ok(contas)
         } else {
             ResponseEntity.noContent().build()
+        }
+    }
+
+    @Operation(
+        summary = "Mudar status da conta",
+        description = "Altera o status de uma conta específica."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Status da conta alterado com sucesso"),
+            ApiResponse(responseCode = "404", description = "Conta não encontrada")
+        ]
+    )
+    @PatchMapping("/mudar-status/{id}/{status}")
+    fun mudarStatus(@PathVariable id: Int, @PathVariable status: Int): ResponseEntity<Void> {
+        val sucesso = contaService.mudarStatus(id, status)
+        return if (sucesso) {
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.notFound().build()
+        }
+
+    }
+
+    @Operation(
+        summary = "Listar contas por id de status",
+        description = "Recupera todos os contas com um status específico."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Contas encontradas para o id de status"),
+            ApiResponse(responseCode = "204", description = "Nenhuma conta encontrada para este id de status")
+        ]
+    )
+    @GetMapping("listar-por-status/{status}")
+    fun listarPorStatus(@PathVariable status: Int): ResponseEntity<List<Conta>> {
+        val contas = contaService.getPorStatus(status)
+        return if (contas.isEmpty()) {
+            ResponseEntity.noContent().build()
+        } else {
+            ResponseEntity.ok(contas)
         }
     }
 

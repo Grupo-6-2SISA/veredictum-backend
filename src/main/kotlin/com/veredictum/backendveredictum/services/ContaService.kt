@@ -156,4 +156,31 @@ class ContaService(
         return contaRepository.findMaisRecentesAnoAtual(PageRequest.of(0, pageSize?: 10))
     }
 
+    fun getPorStatus(statusId: Int): List<Conta> {
+        val historicos = historicoStatusAgendamentoRepository.findAll()
+
+        val ultimoStatusPorConta = historicos
+            .filter { it.conta?.idConta != null && it.statusAgendamento?.idStatusAgendamento != null }
+            .groupBy { it.conta!!.idConta!! } // safe agora porque filtramos acima
+            .mapValues { entry ->
+                entry.value.maxByOrNull { it.dataHoraAlteracao ?: LocalDateTime.MIN } // Se data for nula, assume MIN
+            }
+            .filterValues { it?.statusAgendamento?.idStatusAgendamento == statusId }
+
+        val contas = ultimoStatusPorConta.values
+            .mapNotNull { it?.conta }
+            .sortedBy { it.isPago }
+
+        return contas
+    }
+
+    fun mudarStatus(idConta: Int, novoStatusId: Int): Boolean {
+        val conta = contaRepository.findById(idConta).orElse(null) ?: return false
+        val novoStatus = statusAgendamentoRepository.findById(novoStatusId).orElse(null) ?: return false
+
+        registrarHistorico(conta, novoStatus)
+
+        return true
+    }
+
 }
