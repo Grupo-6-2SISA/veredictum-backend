@@ -3,6 +3,7 @@ package com.veredictum.backendveredictum.controller
 import com.veredictum.backendveredictum.entity.NotaFiscal
 import com.veredictum.backendveredictum.entity.Cliente
 import com.veredictum.backendveredictum.dto.NotaFiscalDTO
+import com.veredictum.backendveredictum.entity.Conta
 import com.veredictum.backendveredictum.services.NotaFiscalService
 import com.veredictum.backendveredictum.services.ClienteService
 import io.swagger.v3.oas.annotations.Operation
@@ -76,7 +77,7 @@ class NotaFiscalController(
         ]
     )
     @PostMapping
-    fun criarNotaFiscal(@RequestBody @Valid notaFiscalDTO: NotaFiscalDTO): ResponseEntity<NotaFiscalDTO> {
+    fun criarNotaFiscal(@RequestBody @Valid notaFiscalDTO: NotaFiscalDTO, @RequestParam statusInicialId: Int): ResponseEntity<NotaFiscalDTO> {
         val clienteId = notaFiscalDTO.fkCliente
             ?: throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente deve ser informado para criar uma nota fiscal")
         val cliente = clienteService.findById(clienteId).orElseThrow {
@@ -92,8 +93,13 @@ class NotaFiscalController(
             urlNuvem = notaFiscalDTO.urlNuvem,
             isEmitida = notaFiscalDTO.isEmitida
         )
-        val notaFiscalSalva = notaFiscalService.save(novaNotaFiscal)
-        return ResponseEntity.status(HttpStatus.CREATED).body(notaFiscalSalva.toDTO())
+        val notaFiscalSalva = notaFiscalService.criarNota(novaNotaFiscal, statusInicialId)
+        return if (notaFiscalSalva != null) {
+            ResponseEntity.status(HttpStatus.CREATED).body(notaFiscalSalva?.toDTO())
+        } else {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        }
+
     }
 
     @Operation(
@@ -206,4 +212,78 @@ class NotaFiscalController(
             ResponseEntity.noContent().build()
         }
     }
+
+    @Operation(
+        summary = "Listar notas por mês e ano",
+        description = "Retorna uma lista de todas as notas cadastradas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Lista de notas retornada com sucesso"),
+            ApiResponse(responseCode = "204", description = "Nenhuma nota encontrada para o mês e ano especificados"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos"),
+            ApiResponse(responseCode = "500", description = "Erro interno do servidor")
+        ]
+    )
+    @GetMapping("/por-mes-e-ano")
+    fun listarNotasPorMesEAno(
+        @RequestParam mes: Int,
+        @RequestParam ano: Int
+    ): ResponseEntity<List<NotaFiscal>> {
+        if (mes !in 1..12) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        if (ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        val notas = notaFiscalService.findByMesEAno(mes, ano)
+        return if (notas.isNotEmpty()) {
+            ResponseEntity.ok(notas)
+        } else {
+            ResponseEntity.noContent().build()
+        }
+    }
+
+    @Operation(
+        summary = "Listar notas por id de status",
+        description = "Recupera todos os notas com um status específico."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "notas encontradas para o id de status"),
+            ApiResponse(responseCode = "204", description = "Nenhuma conta encontrada para este id de status")
+        ]
+    )
+    @GetMapping("listar-por-status/{status}")
+    fun listarPorStatus(@PathVariable status: Int): ResponseEntity<List<NotaFiscal>> {
+        val notas = notaFiscalService.getPorStatus(status)
+        return if (notas.isEmpty()) {
+            ResponseEntity.noContent().build()
+        } else {
+            ResponseEntity.ok(notas)
+        }
+    }
+
+    @Operation(
+        summary = "Mudar status da conta",
+        description = "Altera o status de uma conta específica."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Status da conta alterado com sucesso"),
+            ApiResponse(responseCode = "404", description = "Conta não encontrada")
+        ]
+    )
+    @PatchMapping("/mudar-status/{id}/{status}")
+    fun mudarStatus(@PathVariable id: Int, @PathVariable status: Int): ResponseEntity<Void> {
+        val sucesso = notaFiscalService.mudarStatus(id, status)
+        return if (sucesso) {
+            ResponseEntity.ok().build()
+        } else {
+            ResponseEntity.notFound().build()
+        }
+
+    }
+
+
 }
