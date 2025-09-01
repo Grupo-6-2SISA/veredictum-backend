@@ -102,4 +102,12 @@ class NotaFiscalService(
         return true
     }
 
+    fun contagemNaoEmitidas(mes: Int, ano: Int): Int {
+        return notaFiscalRepository.findByAnoAndMes(ano, mes).count { !it.isEmitida }
+    }
+
+    fun naoEmitidas(mes: Int, ano: Int): List<NotaFiscal> {
+        return notaFiscalRepository.findByAnoAndMes(ano, mes).filter { !it.isEmitida }
+    }
+
 }

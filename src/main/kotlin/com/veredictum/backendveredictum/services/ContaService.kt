@@ -183,4 +183,15 @@ class ContaService(
         return true
     }
 
+    fun contagemAtrasadas(mes: Int, ano: Int): Int {
+        return historicoStatusAgendamentoRepository.findAll()
+            .filter { it.conta?.dataVencimento?.monthValue == mes && it.conta?.dataVencimento?.year == ano && it.conta?.isPago == false }
+            .count()
+    }
+
+    fun atrasadas(mes: Int, ano: Int): List<HistoricoStatusAgendamento> {
+        return historicoStatusAgendamentoRepository.findAll()
+            .filter { it.conta?.dataVencimento?.monthValue == mes && it.conta?.dataVencimento?.year == ano && it.conta?.isPago == false }
+    }
+
 }

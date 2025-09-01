@@ -52,7 +52,6 @@ VALUES
 
 (DEFAULT, 1, 'InovaTech Ltda', 'contato@inovatech.com', NULL, NULL, '77889966000155', '(11)3010-4455',
  '1998-08-05', '2023-02-11', 'Rua do Progresso', 'Centro', 'São Paulo', '1200', 'Sala 804', '01310930',
- 'Cliente PJ pro bono', '550660770', TRr'Rua das Oliveiras', 'Cambuí', 'Campinas', '220', 'Apto 304', '13025030',
  'PF pro bono inativa com indicador', '221144558', TRUE, FALSE, FALSE),
 
 -- Setembro

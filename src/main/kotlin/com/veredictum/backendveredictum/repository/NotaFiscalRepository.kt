@@ -14,7 +14,7 @@ interface NotaFiscalRepository : JpaRepository<NotaFiscal, Int> {
 //    fun findByUrlNuvem(urlNuvem: String): NotaFiscal?
 //    fun findByIdNotaFiscal(idNotaFiscal: Int): NotaFiscal?
 
-    @Query("SELECT n FROM NotaFiscal n WHERE n.isEmitida = false ORDER BY n.dataVencimento ASC")
+    @Query("SELECT n FROM NotaFiscal n WHERE n.isEmitida = false AND n.dataVencimento < CURRENT_DATE ORDER BY n.dataVencimento ASC")
     fun findMaisAtrasadasAnoAtual(pageable: Pageable): List<NotaFiscal>
 
     @Query(

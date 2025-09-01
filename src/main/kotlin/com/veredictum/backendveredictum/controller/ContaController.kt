@@ -3,6 +3,8 @@ package com.veredictum.backendveredictum.controller
 import com.veredictum.backendveredictum.dto.AtendimentoDTO
 import com.veredictum.backendveredictum.dto.ContaDTO
 import com.veredictum.backendveredictum.entity.Conta
+import com.veredictum.backendveredictum.entity.HistoricoStatusAgendamento
+import com.veredictum.backendveredictum.entity.NotaFiscal
 import com.veredictum.backendveredictum.services.ContaService
 import com.veredictum.backendveredictum.services.UsuarioService
 import io.swagger.v3.oas.annotations.Operation
@@ -343,6 +345,58 @@ class ContaController(
         } else {
             ResponseEntity.ok(contas)
         }
+    }
+
+    @Operation(
+        summary = "Contagem de contas não emitidas por mês e ano",
+        description = "Retorna a contagem de contas que estão atrasadas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Contagem de contas não emitidas retornada com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos"),
+        ]
+    )
+    @GetMapping("contagem-atrasadas/{mes}/{ano}")
+    fun contagemAtrasadas(@PathVariable mes: Int, @PathVariable ano: Int): ResponseEntity<Int> {
+
+        if (mes !in 1..12) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        if (ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        val contagem = contaService.contagemAtrasadas(mes, ano)
+        return ResponseEntity.ok(contagem)
+
+    }
+
+    @Operation(
+        summary = "Contas não emitidas por mês e ano",
+        description = "Retorna as contas que estão não emitidas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "contas não emitidas retornada com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos"),
+        ]
+    )
+    @GetMapping("atrasadas/{mes}/{ano}")
+    fun atrasadas(@PathVariable mes: Int, @PathVariable ano: Int): ResponseEntity<List<HistoricoStatusAgendamento>> {
+
+        if (mes !in 1..12) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        if (ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        val contas = contaService.atrasadas(mes, ano)
+        return ResponseEntity.ok(contas)
+
     }
 
 }

@@ -285,5 +285,57 @@ class NotaFiscalController(
 
     }
 
+    @Operation(
+        summary = "Contagem de notas não emitidas por mês e ano",
+        description = "Retorna a contagem de notas que estão não emitidas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Contagem de notas não emitidas retornada com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos"),
+        ]
+    )
+    @GetMapping("contagem-nao-emitidas/{mes}/{ano}")
+    fun contagemNaoEmitidas(@PathVariable mes: Int, @PathVariable ano: Int): ResponseEntity<Int> {
+
+        if (mes !in 1..12) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        if (ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        val contagem = notaFiscalService.contagemNaoEmitidas(mes, ano)
+        return ResponseEntity.ok(contagem)
+
+    }
+
+    @Operation(
+        summary = "Notas não emitidas por mês e ano",
+        description = "Retorna as notas que estão não emitidas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Notas não emitidas retornada com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos"),
+        ]
+    )
+    @GetMapping("nao-emitidas/{mes}/{ano}")
+    fun naoEmitidas(@PathVariable mes: Int, @PathVariable ano: Int): ResponseEntity<List<NotaFiscal>> {
+
+        if (mes !in 1..12) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        if (ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        val contagem = notaFiscalService.naoEmitidas(mes, ano)
+        return ResponseEntity.ok(contagem)
+
+    }
+
 
 }
