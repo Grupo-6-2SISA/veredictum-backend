@@ -252,6 +252,7 @@ INSERT INTO rotina (id_rotina, nome_rotina, hora_inicio, data_inicio, data_fim, 
                                                                                                               (DEFAULT, 'Aniversário (Funcionário)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_funcionario', TRUE),
                                                                                                               (DEFAULT, 'Atendimento (Cliente)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'atendimento_cliente', TRUE),
                                                                                                               (DEFAULT, 'Atendimento (Funcionario)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'atendimento_funcionario', TRUE),
-                                                                                                              (DEFAULT, 'Notas (Funcionario)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'verifica_nota', TRUE),
-                                                                                                              (DEFAULT, 'Contas (Funcionario)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'verifica_conta', TRUE);
+                                                                                                              (DEFAULT, 'Pesquisa Satisfacao (Cliente)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'pesquisa_satisfacao', TRUE),
+                                                                                                              (DEFAULT, 'Aniversario Inicio (Cliente)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_inicio_cliente', TRUE),
+                                                                                                              (DEFAULT, 'Agradecimento Indicacao (Funcionario)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'agradecimento_indicacao', TRUE);
 
