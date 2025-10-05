@@ -40,7 +40,10 @@ data class Cliente(
     @field:Size( max = 14, message = "O CNPJ deve ter no máximo 14 dígitos")
     var cnpj: String? = null,
 
-    @field:Size(max = 15, message = "O numero de telefone deve ter no máximo 15 caracteres")
+    @field:Pattern(
+        regexp = "^\\+55\\d{10,11}$",
+        message = "O telefone deve estar no formato +55 seguido do DDD e número (ex: +5511999999999)"
+    )
     var telefone: String? = null,
 
     @field:NotNull(message = "A data de nascimento é obrigatória")
