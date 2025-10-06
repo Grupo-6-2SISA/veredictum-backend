@@ -279,4 +279,34 @@ class AtendimentoController(
         }
     }
 
+    @Operation(
+        summary = "Contagem de atendimentos concluídos de um mês/ano, ordenados por data",
+        description = "Recupera a contagem dos atendimentos do mês e ano informados, ordenados pela data de início (mais recentes primeiro)."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Atendimentos encontrados, contados e ordenados com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
+        ]
+    )
+    @GetMapping("contagem-cancelados/{mes}/{ano}")
+    fun contagemCancelados(
+        @PathVariable mes: Int,
+        @PathVariable ano: Int
+    ): ResponseEntity<Int> {
+
+        if (mes !in 1..12) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        if (ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+
+        val contagemAtendimentos = atendimentoService.contagemCancelados(ano, mes)
+
+        return ResponseEntity.ok(contagemAtendimentos)
+
+    }
+
 }
