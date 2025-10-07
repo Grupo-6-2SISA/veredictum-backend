@@ -85,10 +85,11 @@ class NotaFiscalController(
         }
         val novaNotaFiscal = NotaFiscal(
             cliente = cliente,
+            numero = notaFiscalDTO.numero,
             dataCriacao = LocalDate.now(),
             etiqueta = notaFiscalDTO.etiqueta,
             valor = notaFiscalDTO.valor,
-             dataVencimento = notaFiscalDTO.dataVencimento,
+            dataVencimento = notaFiscalDTO.dataVencimento,
             descricao = notaFiscalDTO.descricao,
             urlNuvem = notaFiscalDTO.urlNuvem,
             isEmitida = notaFiscalDTO.isEmitida
