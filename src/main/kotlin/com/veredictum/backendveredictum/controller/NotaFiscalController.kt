@@ -134,6 +134,7 @@ class NotaFiscalController(
 
                 val notaFiscalAtualizada = notaFiscalExistente.copy(
                     cliente = cliente,
+                    numero = notaFiscalDTO.numero,
                     dataCriacao = notaFiscalDTO.dataCriacao ?: notaFiscalExistente.dataCriacao, // Usa o valor existente como padrão
                     etiqueta = notaFiscalDTO.etiqueta,
                     valor = notaFiscalDTO.valor,

@@ -120,4 +120,25 @@ class AtendimentoService(
         return atendimentoRepository.findByDataInicioYearAndDataInicioMonth(ano, mes)
     }
 
+    fun contagemCancelados(mes: Int, ano: Int): Int {
+        val statusCancelado = 3
+
+        val historicos = historicoStatusAgendamentoRepository.findAll()
+
+        val ultimoStatusPorAtendimento = historicos
+            .filter { it.atendimento?.idAtendimento != null && it.statusAgendamento?.idStatusAgendamento != statusCancelado }
+            .groupBy { it.atendimento!!.idAtendimento!! } // safe agora porque filtramos acima
+            .mapValues { entry ->
+                entry.value.maxByOrNull { it.dataHoraAlteracao ?: LocalDateTime.MIN } // Se data for nula, assume MIN
+            }
+
+        val atendimentosCanceladosNoMesEAno = ultimoStatusPorAtendimento.values
+            .mapNotNull { it?.atendimento }
+            .filter { atendimento ->
+                atendimento.dataInicio.year == ano && atendimento.dataInicio.monthValue == mes
+            }
+
+        return atendimentosCanceladosNoMesEAno.size
+    }
+
 }
