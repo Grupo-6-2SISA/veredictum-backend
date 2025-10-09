@@ -17,14 +17,17 @@ data class HistoricoStatusAgendamento(
 
     @ManyToOne
     @JoinColumn(name = "fk_atendimento")
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
     var atendimento: Atendimento?,
 
     @ManyToOne
     @JoinColumn(name = "fk_nota_fiscal")
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
     var nota: NotaFiscal?,
 
     @ManyToOne
     @JoinColumn(name = "fk_conta")
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
     var conta: Conta?,
 
     @ManyToOne
