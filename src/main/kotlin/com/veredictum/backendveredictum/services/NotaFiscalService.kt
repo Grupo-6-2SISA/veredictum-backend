@@ -1,5 +1,6 @@
 package com.veredictum.backendveredictum.services
 
+import com.veredictum.backendveredictum.dto.ContasPorAnoDTO
 import com.veredictum.backendveredictum.entity.Conta
 import com.veredictum.backendveredictum.entity.HistoricoStatusAgendamento
 import com.veredictum.backendveredictum.entity.NotaFiscal

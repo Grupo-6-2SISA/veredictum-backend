@@ -1,7 +1,9 @@
 package com.veredictum.backendveredictum.dto
 
-data class ContasPorAnoDTO(
-    val ano: Int,
-    val mes: Int,
-    val valor: Double
-)
+import java.math.BigDecimal
+
+interface ContasPorAnoDTO {
+    val ano: Int
+    val mes: Int
+    val valor: BigDecimal
+}

@@ -1,5 +1,6 @@
 package com.veredictum.backendveredictum.services
 
+import com.veredictum.backendveredictum.dto.ContasPorAnoDTO
 import com.veredictum.backendveredictum.entity.*
 import com.veredictum.backendveredictum.repository.ContaRepository
 import com.veredictum.backendveredictum.repository.HistoricoStatusAgendamentoRepository
@@ -192,6 +193,10 @@ class ContaService(
     fun atrasadas(mes: Int, ano: Int): List<HistoricoStatusAgendamento> {
         return historicoStatusAgendamentoRepository.findAll()
             .filter { it.conta?.dataVencimento?.monthValue == mes && it.conta?.dataVencimento?.year == ano && it.conta?.isPago == false }
+    }
+
+    fun relatorioMensal(ano: Int): List<ContasPorAnoDTO> {
+        return contaRepository.relatorioMensal(ano)
     }
 
 }

@@ -2,6 +2,7 @@ package com.veredictum.backendveredictum.controller
 
 import com.veredictum.backendveredictum.dto.AtendimentoDTO
 import com.veredictum.backendveredictum.dto.ContaDTO
+import com.veredictum.backendveredictum.dto.ContasPorAnoDTO
 import com.veredictum.backendveredictum.entity.Conta
 import com.veredictum.backendveredictum.entity.HistoricoStatusAgendamento
 import com.veredictum.backendveredictum.entity.NotaFiscal
@@ -396,6 +397,15 @@ class ContaController(
 
         val contas = contaService.atrasadas(mes, ano)
         return ResponseEntity.ok(contas)
+
+    }
+
+    @GetMapping("grafico-ano/{ano}")
+    fun graficoAno(@PathVariable ano: Int): ResponseEntity<List<ContasPorAnoDTO>> {
+
+        val retorno : List<ContasPorAnoDTO> = contaService.relatorioMensal(ano)
+
+        return ResponseEntity.ok(retorno)
 
     }
 
