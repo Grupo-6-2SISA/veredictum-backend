@@ -25,9 +25,7 @@ data class  Atendimento(
 
     var etiqueta: String,
 
-    @field:NotNull(message = "O valor é obrigatório")
-    @field:DecimalMin(value = "0.0", inclusive = false, message = "O valor deve ser maior que 0")
-    var valor: Double,
+    var valor: Double?,
 
     @field:NotBlank(message = "A descrição é obrigatória")
     @field:Size(max = 255, message = "A descrição não pode ter mais que 255 caracteres")
@@ -64,7 +62,7 @@ data class  Atendimento(
             fkCliente = this.cliente.idCliente ?: 0,  // ID do Cliente
             fkUsuario = this.usuario.idUsuario ?: 0,  // ID do Usuário
             etiqueta = this.etiqueta ?: "",
-            valor = this.valor,
+            valor = this.valor?: 0.0,
             descricao = this.descricao ?: "",
             dataInicio = this.dataInicio,
             dataFim = this.dataFim,
