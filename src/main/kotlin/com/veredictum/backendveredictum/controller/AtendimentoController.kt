@@ -1,6 +1,7 @@
 package com.veredictum.backendveredictum.controller
 
 import com.veredictum.backendveredictum.dto.AtendimentoDTO
+import com.veredictum.backendveredictum.dto.VisaoGeralAtendimentoDTO
 import com.veredictum.backendveredictum.entity.Atendimento
 import com.veredictum.backendveredictum.services.AtendimentoService
 import com.veredictum.backendveredictum.services.ClienteService
@@ -137,12 +138,12 @@ class AtendimentoController(
         ]
     )
     @GetMapping("/mais-recentes")
-    fun listarAtendimentosOrdenados(): ResponseEntity<List<AtendimentoDTO>> {
-        val atendimentos = atendimentoService.getAtendimentosOrdenados()
+    fun listarAtendimentosOrdenados(): ResponseEntity<List<VisaoGeralAtendimentoDTO>> {
+        val atendimentos = atendimentoService.visaoGeral()
         return if (atendimentos.isEmpty()) {
             ResponseEntity.noContent().build()
         } else {
-            ResponseEntity.ok(atendimentos.map { it.toDTO() })
+            ResponseEntity.ok(atendimentos)
         }
     }
 

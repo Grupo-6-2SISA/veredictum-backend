@@ -1,5 +1,6 @@
 package com.veredictum.backendveredictum.services
 
+import com.veredictum.backendveredictum.dto.VisaoGeralAtendimentoDTO
 import com.veredictum.backendveredictum.entity.Atendimento
 import com.veredictum.backendveredictum.entity.HistoricoStatusAgendamento
 import com.veredictum.backendveredictum.entity.StatusAgendamento
@@ -13,6 +14,10 @@ class AtendimentoService(
     private val statusAgendamentoRepository: StatusAgendamentoRepository,
     private val historicoStatusAgendamentoRepository: HistoricoStatusAgendamentoRepository,
 ) {
+
+    fun visaoGeral(): List<VisaoGeralAtendimentoDTO>    {
+        return atendimentoRepository.visaoGeral()
+    }
 
     fun getAtendimento(id: Int): Atendimento? {
         return atendimentoRepository.findById(id).orElse(null)
@@ -51,9 +56,8 @@ class AtendimentoService(
         return atendimentos
     }
 
-    fun getAtendimentosOrdenados(): List<Atendimento> {
-        return atendimentoRepository.findAll()
-            .sortedByDescending { it.dataInicio }  // Ordena os atendimentos pela data de início (do mais recente para o mais distante)
+    fun getAtendimentosOrdenados(): List<VisaoGeralAtendimentoDTO> {
+        return atendimentoRepository.visaoGeral()
     }
 
 

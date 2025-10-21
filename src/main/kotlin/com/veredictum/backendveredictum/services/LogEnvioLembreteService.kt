@@ -1,5 +1,6 @@
 package com.veredictum.backendveredictum.services
 
+import com.veredictum.backendveredictum.dto.ListagemLogsDTO
 import com.veredictum.backendveredictum.entity.LogEnvioLembrete
 import com.veredictum.backendveredictum.repository.LogEnvioLembreteRepository
 import org.springframework.stereotype.Service
@@ -22,4 +23,9 @@ class LogEnvioLembreteService(
     fun listarTodos(): List<LogEnvioLembrete> {
         return logEnvioLembreteRepository.findAll()
     }
+
+    fun listagemLogs(): List<ListagemLogsDTO> {
+        return logEnvioLembreteRepository.listagemLogs()
+    }
+
 }

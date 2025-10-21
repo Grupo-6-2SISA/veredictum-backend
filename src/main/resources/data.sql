@@ -109,10 +109,13 @@ INSERT INTO status_agendamento (id_status_agendamento, descricao) VALUES
 
 -- Tipos de lembrete
 INSERT INTO tipo_lembrete (id_tipo_lembrete, tipo) VALUES
-                                                       (DEFAULT, 'Atendimento'),
-                                                       (DEFAULT, 'Nota Fiscal'),
-                                                       (DEFAULT, 'Conta'),
-                                                       (DEFAULT, 'Aniversario');
+                                                       (DEFAULT, 'Aniversário (Cliente)'),
+                                                       (DEFAULT, 'Aniversário (Funcionário)'),
+                                                       (DEFAULT, 'Atendimento (Cliente)'),
+                                                       (DEFAULT, 'Atendimento (Funcionario)'),
+                                                        (DEFAULT, 'Pesquisa Satisfacao (Cliente)'),
+                                                   (DEFAULT, 'Aniversario Inicio (Cliente)'),
+                                                   (DEFAULT, 'Agradecimento Indicacao (Cliente)');
 
 -- Usuários administradores
 INSERT INTO usuario (id_usuario, nome, email, senha, is_ativo, is_adm, fk_adm) VALUES
@@ -243,5 +246,5 @@ INSERT INTO rotina (id_rotina, nome_rotina, hora_inicio, data_inicio, data_fim, 
                                                                                                               (DEFAULT, 'Atendimento (Funcionario)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'atendimento_funcionario', TRUE),
                                                                                                               (DEFAULT, 'Pesquisa Satisfacao (Cliente)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'pesquisa_satisfacao', TRUE),
                                                                                                               (DEFAULT, 'Aniversario Inicio (Cliente)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'aniversario_inicio_cliente', TRUE),
-                                                                                                              (DEFAULT, 'Agradecimento Indicacao (Funcionario)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'agradecimento_indicacao', TRUE);
+                                                                                                              (DEFAULT, 'Agradecimento Indicacao (Cliente)', '09:00:00', '2025-06-01 00:00:00', '9999-12-31', 'agradecimento_indicacao', TRUE);
 

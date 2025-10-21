@@ -1,13 +1,16 @@
 package com.veredictum.backendveredictum.controller
 
+import com.veredictum.backendveredictum.dto.ListagemLogsDTO
 import com.veredictum.backendveredictum.dto.LogEnvioLembreteDTO
 import com.veredictum.backendveredictum.entity.LogEnvioLembrete
 import com.veredictum.backendveredictum.repository.LogEnvioLembreteRepository
+import com.veredictum.backendveredictum.services.LogEnvioLembreteService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
+import org.apache.coyote.Response
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,7 +19,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/log-envio-lembrete")
 class LogEnvioLembreteController(
-    val repository: LogEnvioLembreteRepository
+    val repository: LogEnvioLembreteRepository,
+    private val logEnvioLembreteService: LogEnvioLembreteService
 ) {
 
     @Operation(summary = "Buscar todos os logs de envio de lembretes")
@@ -99,4 +103,15 @@ class LogEnvioLembreteController(
             ResponseEntity.notFound().build()
         }
     }
+
+    @GetMapping("/listagem-logs")
+    fun listagemLogs(): ResponseEntity<List<ListagemLogsDTO>> {
+        val resposta = logEnvioLembreteService.listagemLogs()
+        return if (resposta.isEmpty()) {
+            ResponseEntity.status(404).build()
+        } else {
+            ResponseEntity(resposta, HttpStatus.OK)
+        }
+    }
+
 }
