@@ -136,6 +136,22 @@ class AtendimentoService(
         }
     }
 
+    fun excluirAtendimentoLote(ids: List<Int>): Boolean {
+        ids.forEach { id ->
+            if (!atendimentoRepository.findById(id).isPresent) {
+                return false
+            }
+
+        }
+
+            ids.forEach{id ->
+                atendimentoRepository.deleteById(id)
+            }
+
+            return true
+
+    }
+
     fun getPorMesEAnoOrdenados(ano: Int, mes: Int): List<Atendimento>? {
         return atendimentoRepository.findByDataInicioYearAndDataInicioMonth(ano, mes)
     }
