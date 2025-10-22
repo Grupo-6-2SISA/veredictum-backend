@@ -126,8 +126,14 @@ class AtendimentoService(
     }
 
     fun excluirAtendimento(id: Int): Boolean {
-        val atendimento = atendimentoRepository.findById(id)
-        return atendimento.isPresent
+
+        if (atendimentoRepository.findById(id).isPresent)
+        {
+            atendimentoRepository.deleteById(id)
+            return true
+        } else {
+            return false
+        }
     }
 
     fun getPorMesEAnoOrdenados(ano: Int, mes: Int): List<Atendimento>? {
