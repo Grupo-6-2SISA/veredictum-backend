@@ -1,5 +1,6 @@
 package com.veredictum.backendveredictum.services
 
+import com.veredictum.backendveredictum.dto.AtendimentoDTO
 import com.veredictum.backendveredictum.dto.VisaoGeralAtendimentoDTO
 import com.veredictum.backendveredictum.entity.Atendimento
 import com.veredictum.backendveredictum.entity.HistoricoStatusAgendamento
@@ -13,6 +14,9 @@ class AtendimentoService(
     private val atendimentoRepository: AtendimentoRepository,
     private val statusAgendamentoRepository: StatusAgendamentoRepository,
     private val historicoStatusAgendamentoRepository: HistoricoStatusAgendamentoRepository,
+    private val clienteService: ClienteService,
+    private val clienteRepository: ClienteRepository,
+    private val usuarioRepository: UsuarioRepository,
 ) {
 
     fun visaoGeral(): List<VisaoGeralAtendimentoDTO>    {
@@ -87,11 +91,17 @@ class AtendimentoService(
         return true
     }
 
-    fun editarAtendimento(idAtendimento: Int, novoAtendimento: Atendimento): Atendimento? {
+    fun editarAtendimento(idAtendimento: Int, novoAtendimento: AtendimentoDTO): Atendimento? {
         val atendimentoExistente = atendimentoRepository.findById(idAtendimento).orElse(null) ?: return null
 
-        atendimentoExistente.cliente = novoAtendimento.cliente
-        atendimentoExistente.usuario = novoAtendimento.usuario
+        val clienteRelacionado = clienteRepository.findById(novoAtendimento.fkCliente)
+            .orElseThrow { IllegalArgumentException("Cliente não encontrado com o ID fornecido") }
+
+        val usuarioRelacionado = usuarioRepository.findById(novoAtendimento.fkUsuario)
+            .orElseThrow { IllegalArgumentException("Usuario não encontrado com o ID fornecido") }
+
+        atendimentoExistente.cliente = clienteRelacionado
+        atendimentoExistente.usuario = usuarioRelacionado
         atendimentoExistente.etiqueta = novoAtendimento.etiqueta
         atendimentoExistente.valor = novoAtendimento.valor
         atendimentoExistente.descricao = novoAtendimento.descricao

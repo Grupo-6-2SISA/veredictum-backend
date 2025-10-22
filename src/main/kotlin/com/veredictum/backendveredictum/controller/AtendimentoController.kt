@@ -224,7 +224,7 @@ class AtendimentoController(
         ]
     )
     @PutMapping("/{id}")
-    fun editarAtendimento(@PathVariable id: Int, @RequestBody atendimento: Atendimento): ResponseEntity<AtendimentoDTO> {
+    fun editarAtendimento(@PathVariable id: Int, @RequestBody atendimento: AtendimentoDTO): ResponseEntity<AtendimentoDTO> {
         val atendimentoEditado = atendimentoService.editarAtendimento(id, atendimento)
         return if (atendimentoEditado != null) {
             ResponseEntity.ok(atendimentoEditado.toDTO())
