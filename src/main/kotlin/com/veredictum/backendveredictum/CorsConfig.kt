@@ -10,14 +10,16 @@ class CorsConfig {
 
     @Bean
     fun corsConfigurer(): WebMvcConfigurer {
-        return object : WebMvcConfigurer {  // <- aqui usamos object anônimo
+        return object : WebMvcConfigurer {
             override fun addCorsMappings(registry: CorsRegistry) {
-                println("[#INFO] Configurando CORS")
-                registry.addMapping("/**")
-                    .allowedOriginPatterns("http://localhost:*") // permite qualquer porta localhost
-                    .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                    .allowedHeaders("*")
-                    .allowCredentials(true)
+                println("[#INFO] Configurando CORS - permissivo")
+
+                registry.addMapping("/**")             // todos os endpoints
+                    .allowedOriginPatterns("*")        // qualquer origem
+                    .allowedMethods("*")               // todos os métodos (GET, POST, PATCH, DELETE...)
+                    .allowedHeaders("*")               // qualquer header
+                    .allowCredentials(true)            // permite cookies/autenticação
+                    .maxAge(3600)                      // cache do preflight (1h)
             }
         }
     }
