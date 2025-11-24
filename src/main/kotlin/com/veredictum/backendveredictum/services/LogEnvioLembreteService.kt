@@ -28,4 +28,43 @@ class LogEnvioLembreteService(
         return logEnvioLembreteRepository.listagemLogs()
     }
 
+    fun csvLogs(): ByteArray {
+        val dados = logEnvioLembreteRepository.csvLogs()
+
+        if (dados.isEmpty()) return ByteArray(0)
+
+        val csv = buildString {
+
+            appendLine("id;funcionou;id_atendimento;id_cliente;id_conta;id_tipo_lembrete;tipo;mensagem;data_hora_criacao")
+
+            dados.forEach { row ->
+
+                val formatted = row.map { col ->
+
+                    if (col == null) return@map ""
+
+                    var s = col.toString()
+
+                    // Remove quebra de linha interna
+                    s = s.replace("\n", " ").replace("\r", " ")
+
+                    // coloca entre aspas se tiver acento ou espaço
+                    if (s.any { it.code > 127 } || s.contains(" ")) {
+                        s = "\"$s\""
+                    }
+
+                    s
+                }
+
+                appendLine(formatted.joinToString(";"))
+            }
+        }
+
+        val bom = byteArrayOf(0xEF.toByte(), 0xBB.toByte(), 0xBF.toByte())
+
+        return bom + csv.toByteArray(Charsets.UTF_8)
+    }
+
+
+
 }

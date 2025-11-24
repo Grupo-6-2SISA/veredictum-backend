@@ -24,5 +24,9 @@ interface LogEnvioLembreteRepository: JpaRepository<LogEnvioLembrete, Int> {
 """, nativeQuery = true)
     fun listagemLogs(): List<ListagemLogsDTO>
 
+    @Query("""
+        select id_log_envio_lembrete as id, funcionou, fk_atendimento as id_atendimento, fk_cliente as id_cliente, fk_conta as id_conta, fk_tipo_lembrete as id_tipo_lembrete, b.tipo, mensagem, data_hora_criacao from log_envio_lembrete a join tipo_lembrete b on b.id_tipo_lembrete = a.fk_tipo_lembrete
+    """, nativeQuery = true)
+    fun csvLogs(): List<Array<Any>>
 
 }

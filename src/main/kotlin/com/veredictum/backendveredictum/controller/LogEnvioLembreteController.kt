@@ -114,4 +114,19 @@ class LogEnvioLembreteController(
         }
     }
 
+    @GetMapping("/csv-logs", produces = ["text/csv"])
+    fun exportarLogsCsv(): ResponseEntity<ByteArray> {
+        val csv = logEnvioLembreteService.csvLogs()
+
+        if (csv.isEmpty()) {
+            return ResponseEntity.notFound().build()
+        }
+
+        return ResponseEntity.ok()
+            .header("Content-Disposition", "attachment; filename=log_historico_email.csv")
+            .body(csv)
+    }
+
+
+
 }
