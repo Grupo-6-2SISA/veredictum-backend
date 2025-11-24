@@ -46,7 +46,7 @@ interface ContaRepository : JpaRepository<Conta, Int> {
         SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION 
         SELECT 11 UNION SELECT 12
     ) m
-    LEFT JOIN NOTA_FISCAL nf 
+    LEFT JOIN CONTA nf 
         ON m.mes = MONTH(nf.DATA_VENCIMENTO)
         AND YEAR(nf.DATA_VENCIMENTO) = :ano
     GROUP BY m.mes
