@@ -1,6 +1,7 @@
 package com.veredictum.backendveredictum.services
 
 import com.veredictum.backendveredictum.dto.AtendimentoDTO
+import com.veredictum.backendveredictum.dto.ContasPorAnoDTO
 import com.veredictum.backendveredictum.dto.VisaoGeralAtendimentoDTO
 import com.veredictum.backendveredictum.entity.Atendimento
 import com.veredictum.backendveredictum.entity.HistoricoStatusAgendamento
@@ -175,6 +176,14 @@ class AtendimentoService(
             }
 
         return atendimentosCanceladosNoMesEAno.size
+    }
+
+    fun graficoAtrasados(anoSelecionado: Int, anoAnterior: Int): List<ContasPorAnoDTO> {
+        return atendimentoRepository.graficoAtrasados(anoSelecionado, anoAnterior)
+    }
+
+    fun graficoConcluidos(anoSelecionado: Int, anoAnterior: Int): List<ContasPorAnoDTO> {
+        return atendimentoRepository.graficoConcluidos(anoSelecionado, anoAnterior)
     }
 
 }

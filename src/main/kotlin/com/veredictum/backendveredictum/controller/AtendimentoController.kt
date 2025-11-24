@@ -1,6 +1,7 @@
     package com.veredictum.backendveredictum.controller
 
     import com.veredictum.backendveredictum.dto.AtendimentoDTO
+    import com.veredictum.backendveredictum.dto.ContasPorAnoDTO
     import com.veredictum.backendveredictum.dto.VisaoGeralAtendimentoDTO
     import com.veredictum.backendveredictum.entity.Atendimento
     import com.veredictum.backendveredictum.services.AtendimentoService
@@ -318,6 +319,24 @@
 
             return ResponseEntity.ok(contagemAtendimentos)
 
+        }
+
+        @GetMapping("grafico-concluidos/{anoAnterior}/{anoSelecionado}")
+        fun graficoConcluidos(
+            @PathVariable anoAnterior: Int,
+            @PathVariable anoSelecionado: Int
+        ): ResponseEntity<List<ContasPorAnoDTO>> {
+            val dadosGrafico = atendimentoService.graficoConcluidos(anoSelecionado, anoAnterior)
+            return ResponseEntity.ok(dadosGrafico)
+        }
+
+        @GetMapping("grafico-atrasados/{anoAnterior}/{anoSelecionado}")
+        fun graficoAtrasados(
+            @PathVariable anoAnterior: Int,
+            @PathVariable anoSelecionado: Int
+        ): ResponseEntity<List<ContasPorAnoDTO>> {
+            val dadosGrafico = atendimentoService.graficoAtrasados(anoSelecionado, anoAnterior)
+            return ResponseEntity.ok(dadosGrafico)
         }
 
     }

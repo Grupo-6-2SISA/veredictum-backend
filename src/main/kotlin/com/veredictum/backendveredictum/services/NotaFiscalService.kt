@@ -111,4 +111,12 @@ class NotaFiscalService(
         return notaFiscalRepository.findByAnoAndMes(ano, mes).filter { !it.isEmitida }
     }
 
+    fun graficoPendentes(anoSelecionado: Int, anoAnterior: Int): List<ContasPorAnoDTO> {
+        return notaFiscalRepository.graficoPendentes(anoSelecionado, anoAnterior)
+    }
+
+    fun graficoEmitidas(anoSelecionado: Int, anoAnterior: Int): List<ContasPorAnoDTO> {
+        return notaFiscalRepository.graficoEmitidas(anoSelecionado, anoAnterior)
+    }
+
 }

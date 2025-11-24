@@ -409,4 +409,21 @@ class ContaController(
 
     }
 
+    @GetMapping("grafico-atrasadas-ano/{anoAnterior}/{anoSelecionado}")
+    fun graficoAtrasadasAno(@PathVariable anoAnterior: Int, @PathVariable anoSelecionado: Int): ResponseEntity<List<ContasPorAnoDTO>> {
+
+        val retorno : List<ContasPorAnoDTO> = contaService.graficoAtrasadas(anoSelecionado, anoAnterior)
+
+        return ResponseEntity.ok(retorno)
+
+    }
+
+    @GetMapping("grafico-pagas-ano/{anoAnterior}/{anoSelecionado}")
+    fun graficoPagasAno(@PathVariable anoAnterior: Int, @PathVariable anoSelecionado: Int): ResponseEntity<List<ContasPorAnoDTO>> {
+
+        val retorno : List<ContasPorAnoDTO> = contaService.graficoPagas(anoSelecionado, anoAnterior)
+
+        return ResponseEntity.ok(retorno)
+
+    }
 }

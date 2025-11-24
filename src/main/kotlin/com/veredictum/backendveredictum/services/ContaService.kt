@@ -199,4 +199,12 @@ class ContaService(
         return contaRepository.relatorioMensal(ano)
     }
 
+    fun graficoAtrasadas(anoSelecionado: Int, anoAnterior: Int): List<ContasPorAnoDTO> {
+        return contaRepository.graficoAtrasadas(anoSelecionado, anoAnterior)
+    }
+
+    fun graficoPagas(anoSelecionado: Int, anoAnterior: Int): List<ContasPorAnoDTO> {
+        return contaRepository.graficoPagas(anoSelecionado, anoAnterior)
+    }
+
 }

@@ -340,4 +340,22 @@ class NotaFiscalController(
 
     }
 
+    @GetMapping("/grafico-pendentes/{anoSelecionado}/{anoAnterior}")
+    fun graficoPendentes(
+        @PathVariable anoSelecionado: Int,
+        @PathVariable anoAnterior: Int
+    ): ResponseEntity<List<ContasPorAnoDTO>> {
+        val dados = notaFiscalService.graficoPendentes(anoSelecionado, anoAnterior)
+        return ResponseEntity.ok(dados)
+    }
+
+    @GetMapping("/grafico-emitidas/{anoSelecionado}/{anoAnterior}")
+    fun graficoEmitidas(
+        @PathVariable anoSelecionado: Int,
+        @PathVariable anoAnterior: Int
+    ): ResponseEntity<List<ContasPorAnoDTO>> {
+        val dados = notaFiscalService.graficoEmitidas(anoSelecionado, anoAnterior)
+        return ResponseEntity.ok(dados)
+    }
+
 }

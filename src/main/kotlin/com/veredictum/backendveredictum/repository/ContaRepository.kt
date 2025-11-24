@@ -54,4 +54,55 @@ interface ContaRepository : JpaRepository<Conta, Int> {
 """, nativeQuery = true)
     fun relatorioMensal(@Param("ano") ano: Int): List<ContasPorAnoDTO>
 
+
+    @Query("""
+        SELECT 
+    anos.ano,
+    meses.mes,
+    COUNT(c.id_conta) AS valor
+FROM 
+    (SELECT :anoAnterior AS ano UNION SELECT :anoSelecionado) anos
+CROSS JOIN 
+    (
+        SELECT 1 AS mes UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION
+        SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION
+        SELECT 11 UNION SELECT 12
+    ) meses
+LEFT JOIN conta c
+    ON c.is_pago = 0
+    AND c.data_vencimento < STR_TO_DATE(CONCAT(anos.ano,'-',meses.mes,'-01'), '%Y-%m-%d')
+GROUP BY 
+    anos.ano,
+    meses.mes
+ORDER BY 
+    anos.ano,
+    meses.mes
+    """, nativeQuery = true)
+    fun graficoAtrasadas(@Param("anoSelecionado") anoSelecionado: Int, @Param("anoAnterior") anoAnterior: Int): List<ContasPorAnoDTO>
+
+    @Query("""
+        SELECT 
+    anos.ano,
+    meses.mes,
+    COUNT(c.id_conta) AS valor
+FROM 
+    (SELECT :anoAnterior AS ano UNION SELECT :anoSelecionado) anos
+CROSS JOIN 
+    (
+        SELECT 1 AS mes UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION
+        SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION
+        SELECT 11 UNION SELECT 12
+    ) meses
+LEFT JOIN conta c
+    ON c.is_pago = 1
+    AND c.data_vencimento < STR_TO_DATE(CONCAT(anos.ano,'-',meses.mes,'-01'), '%Y-%m-%d')
+GROUP BY 
+    anos.ano,
+    meses.mes
+ORDER BY 
+    anos.ano,
+    meses.mes
+    """, nativeQuery = true)
+    fun graficoPagas(@Param("anoSelecionado") anoSelecionado: Int, @Param("anoAnterior") anoAnterior: Int): List<ContasPorAnoDTO>
+
 }
