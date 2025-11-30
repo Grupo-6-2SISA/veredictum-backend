@@ -426,4 +426,62 @@ class ContaController(
         return ResponseEntity.ok(retorno)
 
     }
+
+    @Operation(
+        summary = "Contagem de notas fiscais não emitidas por mês e ano",
+        description = "Retorna a contagem de notas fiscais que não foram emitidas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Contagem retornada com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos")
+        ]
+    )
+    @GetMapping("/contagem-nao-pagas/{mes}/{ano}")
+    fun countNaoEmitidas(@PathVariable mes: Int, @PathVariable ano: Int): ResponseEntity<Int> {
+        if (mes !in 1..12 || ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        val contagem = contaService.countNaoPagas(mes, ano)
+        return ResponseEntity.ok(contagem)
+    }
+
+    @Operation(
+        summary = "Contagem total de notas fiscais por mês e ano",
+        description = "Retorna a contagem total de notas fiscais cadastradas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Contagem retornada com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos")
+        ]
+    )
+    @GetMapping("/contagem-total/{mes}/{ano}")
+    fun countTotalPorMesEAno(@PathVariable mes: Int, @PathVariable ano: Int): ResponseEntity<Int> {
+        if (mes !in 1..12 || ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        val contagem = contaService.countTotalPorMesEAno(mes, ano)
+        return ResponseEntity.ok(contagem)
+    }
+
+    @Operation(
+        summary = "Contagem de notas fiscais emitidas por mês e ano",
+        description = "Retorna a contagem de notas fiscais emitidas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Contagem retornada com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos")
+        ]
+    )
+    @GetMapping("/contagem-pagas/{mes}/{ano}")
+    fun countEmitidas(@PathVariable mes: Int, @PathVariable ano: Int): ResponseEntity<Int> {
+        if (mes !in 1..12 || ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        val contagem = contaService.countPagas(mes, ano)
+        return ResponseEntity.ok(contagem)
+    }
+
 }

@@ -78,4 +78,30 @@ ORDER BY
     """, nativeQuery = true)
     fun graficoEmitidas(@Param("anoSelecionado") anoSelecionado: Int, @Param("anoAnterior") anoAnterior: Int): List<ContasPorAnoDTO>
 
+    @Query("""
+        SELECT count(*)
+        FROM nota_fiscal
+        WHERE is_emitida = 0
+          AND MONTH(data_vencimento) = :mes
+          AND YEAR(data_vencimento) = :ano
+    """, nativeQuery = true)
+    fun countNaoEmitidas(@Param("mes") mes: Int, @Param("ano") ano: Int): Int
+
+    @Query("""
+        SELECT count(*)
+        FROM nota_fiscal
+        WHERE is_emitida = 1
+          AND MONTH(data_vencimento) = :mes
+          AND YEAR(data_vencimento) = :ano
+    """, nativeQuery = true)
+    fun countEmitidas(@Param("mes") mes: Int, @Param("ano") ano: Int): Int
+
+    @Query("""
+        SELECT count(*)
+        FROM nota_fiscal
+        WHERE MONTH(data_vencimento) = :mes
+          AND YEAR(data_vencimento) = :ano
+    """, nativeQuery = true)
+    fun countTotalPorMesEAno(@Param("mes") mes: Int, @Param("ano") ano: Int): Int
+
 }

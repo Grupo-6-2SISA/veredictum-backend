@@ -186,4 +186,16 @@ class AtendimentoService(
         return atendimentoRepository.graficoConcluidos(anoSelecionado, anoAnterior)
     }
 
+    fun countConcluidos(mes: Int, ano: Int): Int {
+        return atendimentoRepository.countConcluidos(mes, ano)
+    }
+
+    fun countNaoConcluidos(mes: Int, ano: Int): Int {
+        return atendimentoRepository.countNaoConcluidos(mes, ano)
+    }
+
+    fun countAtendimentosPorMesEAno(mes: Int, ano: Int): Int {
+        return atendimentoRepository.countAtendimentosPorMesEAno(mes, ano)
+    }
+
 }

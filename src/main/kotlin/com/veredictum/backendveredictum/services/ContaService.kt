@@ -207,4 +207,16 @@ class ContaService(
         return contaRepository.graficoPagas(anoSelecionado, anoAnterior)
     }
 
+    fun countTotalPorMesEAno(mes: Int, ano: Int): Int {
+        return contaRepository.countTotalPorMesEAno(mes, ano)
+    }
+
+    fun countPagas(mes: Int, ano: Int): Int {
+        return contaRepository.countPagas(mes, ano)
+    }
+
+    fun countNaoPagas(mes: Int, ano: Int): Int {
+        return contaRepository.countNaoPagas(mes, ano)
+    }
+
 }

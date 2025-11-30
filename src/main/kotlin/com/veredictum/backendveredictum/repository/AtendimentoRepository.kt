@@ -84,4 +84,30 @@ ORDER BY
     fun graficoConcluidos(@Param("anoSelecionado") anoSelecionado: Int, @Param("anoAnterior") anoAnterior: Int): List<ContasPorAnoDTO>
 
 
+@Query("""
+    SELECT count(*)
+    FROM atendimento
+    WHERE is_pago = 1
+    AND MONTH(data_vencimento) = :mes
+    AND YEAR(data_vencimento) = :ano
+""", nativeQuery = true)
+fun countConcluidos(@Param("mes") mes: Int, @Param("ano") ano: Int): Int
+
+@Query("""
+    SELECT count(*)
+    FROM atendimento
+    WHERE MONTH(data_vencimento) = :mes
+    AND YEAR(data_vencimento) = :ano
+""", nativeQuery = true)
+fun countAtendimentosPorMesEAno(@Param("mes") mes: Int, @Param("ano") ano: Int): Int
+
+@Query("""
+        SELECT count(*)
+        FROM atendimento
+        WHERE is_pago = 0
+        AND MONTH(data_vencimento) = :mes
+        AND YEAR(data_vencimento) = :ano
+    """, nativeQuery = true)
+    fun countNaoConcluidos(@Param("mes") mes: Int, @Param("ano") ano: Int): Int
+
 }

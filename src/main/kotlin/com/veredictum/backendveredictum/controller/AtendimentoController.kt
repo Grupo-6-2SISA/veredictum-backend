@@ -339,4 +339,31 @@
             return ResponseEntity.ok(dadosGrafico)
         }
 
+        @GetMapping("count-concluidos/{mes}/{ano}")
+        fun countConcluidos(
+            @PathVariable mes: Int,
+            @PathVariable ano: Int
+        ): ResponseEntity<Int> {
+            val count = atendimentoService.countConcluidos(mes, ano)
+            return ResponseEntity.ok(count)
+        }
+
+        @GetMapping("count-nao-concluidos/{mes}/{ano}")
+        fun countNaoConcluidos(
+            @PathVariable mes: Int,
+            @PathVariable ano: Int
+        ): ResponseEntity<Int> {
+            val count = atendimentoService.countNaoConcluidos(mes, ano)
+            return ResponseEntity.ok(count)
+        }
+
+        @GetMapping("count-atendimentos-mes-ano/{mes}/{ano}")
+        fun countAtendimentosPorMesEAno(
+            @PathVariable mes: Int,
+            @PathVariable ano: Int
+        ): ResponseEntity<Int> {
+            val count = atendimentoService.countAtendimentosPorMesEAno(mes, ano)
+            return ResponseEntity.ok(count)
+        }
+
     }

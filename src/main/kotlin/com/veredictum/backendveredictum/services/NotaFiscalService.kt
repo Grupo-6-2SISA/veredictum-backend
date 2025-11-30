@@ -119,4 +119,15 @@ class NotaFiscalService(
         return notaFiscalRepository.graficoEmitidas(anoSelecionado, anoAnterior)
     }
 
+    fun countNaoEmitidas(mes: Int, ano: Int): Int {
+        return notaFiscalRepository.countNaoEmitidas(mes, ano)
+    }
+    fun countTotalPorMesEAno(mes: Int, ano: Int): Int {
+        return notaFiscalRepository.countTotalPorMesEAno(mes, ano)
+    }
+
+    fun countEmitidas(mes: Int, ano: Int): Int {
+        return notaFiscalRepository.countEmitidas(mes, ano)
+    }
+
 }

@@ -105,4 +105,30 @@ ORDER BY
     """, nativeQuery = true)
     fun graficoPagas(@Param("anoSelecionado") anoSelecionado: Int, @Param("anoAnterior") anoAnterior: Int): List<ContasPorAnoDTO>
 
+    @Query("""
+        SELECT count(*)
+        FROM conta
+        WHERE MONTH(data_vencimento) = :mes
+          AND YEAR(data_vencimento) = :ano
+    """, nativeQuery = true)
+    fun countTotalPorMesEAno(@Param("mes") mes: Int, @Param("ano") ano: Int): Int
+
+    @Query("""
+        SELECT count(*)
+        FROM conta
+        WHERE is_pago = 1
+          AND MONTH(data_vencimento) = :mes
+          AND YEAR(data_vencimento) = :ano
+    """, nativeQuery = true)
+    fun countPagas(@Param("mes") mes: Int, @Param("ano") ano: Int): Int
+
+    @Query("""
+        SELECT count(*)
+        FROM conta
+        WHERE is_pago = 0
+          AND MONTH(data_vencimento) = :mes
+          AND YEAR(data_vencimento) = :ano
+    """, nativeQuery = true)
+    fun countNaoPagas(@Param("mes") mes: Int, @Param("ano") ano: Int): Int
+
 }

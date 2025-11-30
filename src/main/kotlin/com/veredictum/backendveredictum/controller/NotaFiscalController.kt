@@ -358,4 +358,43 @@ class NotaFiscalController(
         return ResponseEntity.ok(dados)
     }
 
+
+    @Operation(
+        summary = "Contagem total de notas fiscais por mês e ano",
+        description = "Retorna a contagem total de notas fiscais cadastradas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Contagem retornada com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos")
+        ]
+    )
+    @GetMapping("/contagem-total/{mes}/{ano}")
+    fun countTotalPorMesEAno(@PathVariable mes: Int, @PathVariable ano: Int): ResponseEntity<Int> {
+        if (mes !in 1..12 || ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        val contagem = notaFiscalService.countTotalPorMesEAno(mes, ano)
+        return ResponseEntity.ok(contagem)
+    }
+
+    @Operation(
+        summary = "Contagem de notas fiscais emitidas por mês e ano",
+        description = "Retorna a contagem de notas fiscais emitidas para o mês e ano especificados."
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "200", description = "Contagem retornada com sucesso"),
+            ApiResponse(responseCode = "400", description = "Parâmetros inválidos fornecidos")
+        ]
+    )
+    @GetMapping("/contagem-emitidas/{mes}/{ano}")
+    fun countEmitidas(@PathVariable mes: Int, @PathVariable ano: Int): ResponseEntity<Int> {
+        if (mes !in 1..12 || ano.toString().length != 4) {
+            return ResponseEntity.badRequest().body(null)
+        }
+        val contagem = notaFiscalService.countEmitidas(mes, ano)
+        return ResponseEntity.ok(contagem)
+    }
+
 }
